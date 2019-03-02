@@ -1,6 +1,7 @@
 package android.chribru.dev.popularmovies.activities;
 
 import android.chribru.dev.popularmovies.adapters.OverviewAdapter;
+import android.chribru.dev.popularmovies.network.MovieClient;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.chribru.dev.popularmovies.R;
@@ -18,6 +19,9 @@ public class OverviewActivity extends AppCompatActivity {
         rvOverview.setLayoutManager(new GridLayoutManager(this, 3));
         OverviewAdapter adapter = new OverviewAdapter();
         rvOverview.setAdapter(adapter);
+
+        MovieClient movieClient = new MovieClient(getString(R.string.movie_api_key));
+        movieClient.getPopularMovies();
     }
 
 }
