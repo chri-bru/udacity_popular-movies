@@ -13,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClientBuilder {
 
     private static final String BASE_URL = "https://api.themoviedb.org/";
+
     private static Retrofit retrofit;
     private static ApiClientBuilder builder;
 

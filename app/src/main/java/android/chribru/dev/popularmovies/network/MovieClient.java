@@ -2,11 +2,8 @@ package android.chribru.dev.popularmovies.network;
 
 import android.chribru.dev.popularmovies.api.TheMovieDbMovieApi;
 import android.chribru.dev.popularmovies.models.Results;
-import android.util.Log;
 
 import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class MovieClient {
     TheMovieDbMovieApi movieApi;
@@ -15,18 +12,21 @@ public class MovieClient {
         movieApi = ApiClientBuilder.getBuilder().getClientWithApikey(apiKey).create(TheMovieDbMovieApi.class);
     }
 
-    public void getPopularMovies() {
-        Call<Results> call = movieApi.popularMovieList(1);
-        call.enqueue(new Callback<Results>() {
-            @Override
-            public void onResponse(Call<Results> call, Response<Results> response) {
-                Log.d("RESPONSE", String.valueOf(response.code()));
-            }
+    /**
+     * Returns the list of popular movies.
+     * A single page holds 20 movies.
+     * @param page the page of the results
+     */
+    public Call<Results> getPopularMovies(int page) {
+        return movieApi.popularMovieList(page);
+    }
 
-            @Override
-            public void onFailure(Call<Results> call, Throwable t) {
-                Log.d("RESPONSE", t.getMessage());
-            }
-        });
+    /**
+     * Returns the list of top rated movies.
+     * A single page holds 20 movies.
+     * @param page the page of the results
+     */
+    public Call<Results> getTopRatedMovies(int page) {
+        return movieApi.topRatedMovieList(page);
     }
 }

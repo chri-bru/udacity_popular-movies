@@ -2,8 +2,8 @@ package android.chribru.dev.popularmovies.utils;
 
 import org.jetbrains.annotations.Nullable;
 
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class TheMoviePathResolver {
 
@@ -18,12 +18,7 @@ public class TheMoviePathResolver {
     public static final String SIZE_ORIGINAL = "original";
 
     @Nullable
-    public static URL generateUrl(String relativePath, String size) {
-        try {
-            return new URL(BASE_IMAGE_URL + size + "/" + relativePath);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        return null;
+    public static String getUrl(String relativePath, String size) {
+        return BASE_IMAGE_URL + size + "/" + relativePath;
     }
 }

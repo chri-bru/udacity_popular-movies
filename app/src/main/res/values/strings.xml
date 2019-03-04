@@ -1,8 +1,16 @@
 <resources>
     <!-- API related strings -->
-    <string name="movie_api_key">Your Api key goes here!</string>
+    <string name="movie_api_key"></string>
 
-    <!-- Activity related string-->
+    <!-- Activity related string -->
     <string name="app_name">Popular Movies</string>
     <string name="title_activity_overview">Overview</string>
+
+    <!-- UI strings -->
+    <string name="overview_title_top_rated">Top Rated Movies</string>
+    <string name="overview_title_popular">Popular Movies</string>
+
+    <!-- menu strings -->
+    <string name="overview_menu_top_rated">Top Rated</string>
+    <string name="overview_menu_popular">Popular</string>
 </resources>

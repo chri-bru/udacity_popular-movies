@@ -15,7 +15,7 @@
         <activity
             android:name=".activities.OverviewActivity"
             android:label="@string/title_activity_overview"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/Theme.AppCompat.DayNight.DarkActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
