@@ -1,11 +1,14 @@
 package android.chribru.dev.popularmovies.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.ArrayList;
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Movie {
+public class Movie implements Parcelable {
 
     @SerializedName("poster_path")
     @Expose
@@ -58,24 +61,23 @@ public class Movie {
     }
 
     /**
-     *
-     * @param id
-     * @param genreIds
-     * @param title
-     * @param releaseDate
-     * @param overview
-     * @param posterPath
-     * @param originalTitle
-     * @param voteAverage
-     * @param originalLanguage
-     * @param adult
-     * @param backdropPath
-     * @param voteCount
-     * @param video
-     * @param popularity
+     * Constructor with all parameters
+     * @param id movie id
+     * @param genreIds genre id
+     * @param title title of movie
+     * @param releaseDate release data
+     * @param overview description
+     * @param posterPath relative path to poster
+     * @param originalTitle original title of movie
+     * @param voteAverage average the movie vote
+     * @param originalLanguage original language
+     * @param adult rated adult
+     * @param backdropPath relative path to backdrop
+     * @param voteCount vote count
+     * @param video link to trailer
+     * @param popularity popularity score
      */
     public Movie(String posterPath, Boolean adult, String overview, String releaseDate, List<Integer> genreIds, Integer id, String originalTitle, String originalLanguage, String title, String backdropPath, Double popularity, Integer voteCount, Boolean video, Double voteAverage) {
-        super();
         this.posterPath = posterPath;
         this.adult = adult;
         this.overview = overview;
@@ -274,4 +276,55 @@ public class Movie {
         return this;
     }
 
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(posterPath);
+        dest.writeValue(adult);
+        dest.writeValue(overview);
+        dest.writeValue(releaseDate);
+        dest.writeList(genreIds);
+        dest.writeValue(id);
+        dest.writeValue(originalTitle);
+        dest.writeValue(originalLanguage);
+        dest.writeValue(title);
+        dest.writeValue(backdropPath);
+        dest.writeValue(popularity);
+        dest.writeValue(voteCount);
+        dest.writeValue(video);
+        dest.writeValue(voteAverage);
+    }
+
+    public Movie(Parcel in) {
+        this.posterPath = ((String) in.readValue((String.class.getClassLoader())));
+        this.adult = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
+        this.overview = ((String) in.readValue((String.class.getClassLoader())));
+        this.releaseDate = ((String) in.readValue((String.class.getClassLoader())));
+        in.readList(this.genreIds, (java.lang.Integer.class.getClassLoader()));
+        this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.originalTitle = ((String) in.readValue((String.class.getClassLoader())));
+        this.originalLanguage = ((String) in.readValue((String.class.getClassLoader())));
+        this.title = ((String) in.readValue((String.class.getClassLoader())));
+        this.backdropPath = ((String) in.readValue((String.class.getClassLoader())));
+        this.popularity = ((Double) in.readValue((Double.class.getClassLoader())));
+        this.voteCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.video = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
+        this.voteAverage = ((Double) in.readValue((Double.class.getClassLoader())));
+    }
 }

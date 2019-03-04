@@ -1,7 +1,4 @@
 <resources>
-    <!-- API related strings -->
-    <string name="movie_api_key"></string>
-
     <!-- Activity related string -->
     <string name="app_name">Popular Movies</string>
     <string name="title_activity_overview">Overview</string>

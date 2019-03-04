@@ -1,10 +1,12 @@
 package android.chribru.dev.popularmovies.activities;
 
 import android.chribru.dev.popularmovies.adapters.OverviewAdapter;
+import android.chribru.dev.popularmovies.data.Constants;
 import android.chribru.dev.popularmovies.interfaces.OverviewAdapterOnClickHandler;
 import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.models.Results;
 import android.chribru.dev.popularmovies.network.MovieClient;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.chribru.dev.popularmovies.R;
@@ -47,7 +49,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     }
 
     private void populateUi() {
-        movieClient = new MovieClient(getString(R.string.movie_api_key));
+        movieClient = new MovieClient(Constants.API_KEY);
         getPopularMovies(1);
     }
 
@@ -79,16 +81,20 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     private void getPopularMovies(int page) {
         Call<Results> call = movieClient.getPopularMovies(page);
         call.enqueue(new MovieCallbackHandler());
+        this.setTitle(R.string.overview_title_popular);
     }
 
     private void getTopRatedMovies(int page) {
         Call<Results> call = movieClient.getTopRatedMovies(page);
         call.enqueue(new MovieCallbackHandler());
+        this.setTitle(R.string.overview_title_top_rated);
     }
 
     @Override
     public void onClick(Movie movie) {
-        Toast.makeText(this, String.format("You clicked %s", movie.getTitle()), Toast.LENGTH_LONG).show();
+        Intent intent = new Intent(this, MovieDetailActivity.class);
+        intent.putExtra(Constants.MOVIE_PARCELABLE, movie);
+        startActivity(intent);
     }
 
 
