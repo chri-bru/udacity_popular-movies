@@ -30,6 +30,8 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
 
     private MovieClient movieClient;
     private Results results;
+    private int activityLabelId;
+
     private OverviewAdapter adapter;
 
     @Override
@@ -38,7 +40,27 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         setContentView(R.layout.activity_overview);
 
         createUiReferences();
-        populateUi();
+
+        movieClient = new MovieClient(Constants.API_KEY);
+
+        if (savedInstanceState == null) {
+            populateUi();
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelable(Constants.RESULTS_PARCELABLE, results);
+        outState.putInt(Constants.ACTIVITY_LABEL, activityLabelId);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        Results savedResults = savedInstanceState.getParcelable(Constants.RESULTS_PARCELABLE);
+        setResults(savedResults);
+        setActivityLabel(savedInstanceState.getInt(Constants.ACTIVITY_LABEL));
     }
 
     private void createUiReferences() {
@@ -49,7 +71,6 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     }
 
     private void populateUi() {
-        movieClient = new MovieClient(Constants.API_KEY);
         getPopularMovies(1);
     }
 
@@ -64,13 +85,11 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         int selectedItem = item.getItemId();
 
         if (selectedItem == R.id.menu_sorting_popular) {
-            adapter.setResults(null);
             getPopularMovies(1);
             return true;
         }
 
         if (selectedItem == R.id.menu_sorting_top_rated) {
-            adapter.setResults(null);
             getTopRatedMovies(1);
             return true;
         }
@@ -81,13 +100,13 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     private void getPopularMovies(int page) {
         Call<Results> call = movieClient.getPopularMovies(page);
         call.enqueue(new MovieCallbackHandler());
-        this.setTitle(R.string.overview_title_popular);
+        setActivityLabel(R.string.overview_title_popular);
     }
 
     private void getTopRatedMovies(int page) {
         Call<Results> call = movieClient.getTopRatedMovies(page);
         call.enqueue(new MovieCallbackHandler());
-        this.setTitle(R.string.overview_title_top_rated);
+        setActivityLabel(R.string.overview_title_top_rated);
     }
 
     @Override
@@ -97,13 +116,14 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         startActivity(intent);
     }
 
-
+    /**
+     * Callback handler for handling async requests via Retrofit
+     */
     private class MovieCallbackHandler implements Callback<Results> {
         @Override
         public void onResponse(Call<Results> call, Response<Results> response) {
             Log.i(this.getClass().getName(), "Request was successful!");
-            results = response.body();
-            adapter.setResults(results);
+            setResults(response.body());
         }
 
         @Override
@@ -111,5 +131,17 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
             Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
             results = new Results();
         }
+    }
+
+
+    private void setActivityLabel(int resourceId) {
+        this.activityLabelId = resourceId;
+        this.setTitle(getString(activityLabelId));
+    }
+
+    private void setResults(Results results) {
+        adapter.setResults(null);
+        this.results = results;
+        adapter.setResults(results);
     }
 }

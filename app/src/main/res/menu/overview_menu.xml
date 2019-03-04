@@ -6,14 +6,14 @@
     tools:context=".activities.OverviewActivity">
 
     <item
-        android:id="@+id/menu_sorting_top_rated"
-        android:title="@string/overview_menu_top_rated"
+        android:id="@+id/menu_sorting_popular"
+        android:title="@string/overview_menu_popular"
         android:orderInCategory="1"
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_sorting_popular"
-        android:title="@string/overview_menu_popular"
+        android:id="@+id/menu_sorting_top_rated"
+        android:title="@string/overview_menu_top_rated"
         android:orderInCategory="2"
         app:showAsAction="never" />
 </menu>

@@ -1,12 +1,15 @@
 package android.chribru.dev.popularmovies.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class Results {
+public class Results implements Parcelable {
 
     @SerializedName("page")
     @Expose
@@ -21,6 +24,16 @@ public class Results {
     @Expose
     private Integer totalPages;
 
+    public final static Parcelable.Creator<Results> CREATOR = new Creator<Results>() {
+        public Results createFromParcel(Parcel in) {
+            return new Results(in);
+        }
+
+        public Results[] newArray(int size) {
+            return (new Results[size]);
+        }
+    };
+
     /**
      * No args constructor for use in serialization
      *
@@ -29,11 +42,11 @@ public class Results {
     }
 
     /**
-     *
-     * @param movies
-     * @param totalResults
-     * @param page
-     * @param totalPages
+     * Constructor with all parameters
+     * @param movies list of all movies
+     * @param totalResults number of total results
+     * @param page page number
+     * @param totalPages total number of pages
      */
     public Results(Integer page, List<Movie> movies, Integer totalResults, Integer totalPages) {
         super();
@@ -41,6 +54,29 @@ public class Results {
         this.movies = movies;
         this.totalResults = totalResults;
         this.totalPages = totalPages;
+    }
+
+    /**
+     * Constructor for Parcelable
+     * @param in Parcel to use to initialize the object with
+     */
+    protected Results(Parcel in) {
+        this.page = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        in.readList(this.movies, (android.chribru.dev.popularmovies.models.Movie.class.getClassLoader()));
+        this.totalResults = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.totalPages = ((Integer) in.readValue((Integer.class.getClassLoader())));
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(page);
+        dest.writeList(movies);
+        dest.writeValue(totalResults);
+        dest.writeValue(totalPages);
+    }
+
+    public int describeContents() {
+        return 0;
     }
 
     public Integer getPage() {
@@ -94,5 +130,4 @@ public class Results {
         this.totalPages = totalPages;
         return this;
     }
-
 }

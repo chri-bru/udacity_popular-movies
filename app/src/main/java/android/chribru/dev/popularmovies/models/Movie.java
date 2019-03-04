@@ -53,6 +53,18 @@ public class Movie implements Parcelable {
     @Expose
     private Double voteAverage;
 
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            return new Movie(source);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
     /**
      * No args constructor for use in serialization
      *
@@ -92,6 +104,50 @@ public class Movie implements Parcelable {
         this.voteCount = voteCount;
         this.video = video;
         this.voteAverage = voteAverage;
+    }
+
+    /**
+     * Constructor for Parcelable
+     * @param in Parcel to use to initialize the object with
+     */
+    public Movie(Parcel in) {
+        this.posterPath = ((String) in.readValue((String.class.getClassLoader())));
+        this.adult = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
+        this.overview = ((String) in.readValue((String.class.getClassLoader())));
+        this.releaseDate = ((String) in.readValue((String.class.getClassLoader())));
+        in.readList(this.genreIds, (java.lang.Integer.class.getClassLoader()));
+        this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.originalTitle = ((String) in.readValue((String.class.getClassLoader())));
+        this.originalLanguage = ((String) in.readValue((String.class.getClassLoader())));
+        this.title = ((String) in.readValue((String.class.getClassLoader())));
+        this.backdropPath = ((String) in.readValue((String.class.getClassLoader())));
+        this.popularity = ((Double) in.readValue((Double.class.getClassLoader())));
+        this.voteCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
+        this.video = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
+        this.voteAverage = ((Double) in.readValue((Double.class.getClassLoader())));
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeValue(posterPath);
+        dest.writeValue(adult);
+        dest.writeValue(overview);
+        dest.writeValue(releaseDate);
+        dest.writeList(genreIds);
+        dest.writeValue(id);
+        dest.writeValue(originalTitle);
+        dest.writeValue(originalLanguage);
+        dest.writeValue(title);
+        dest.writeValue(backdropPath);
+        dest.writeValue(popularity);
+        dest.writeValue(voteCount);
+        dest.writeValue(video);
+        dest.writeValue(voteAverage);
     }
 
     public String getPosterPath() {
@@ -274,57 +330,5 @@ public class Movie implements Parcelable {
     public Movie withVoteAverage(Double voteAverage) {
         this.voteAverage = voteAverage;
         return this;
-    }
-
-    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
-        @Override
-        public Movie createFromParcel(Parcel source) {
-            return new Movie(source);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeValue(posterPath);
-        dest.writeValue(adult);
-        dest.writeValue(overview);
-        dest.writeValue(releaseDate);
-        dest.writeList(genreIds);
-        dest.writeValue(id);
-        dest.writeValue(originalTitle);
-        dest.writeValue(originalLanguage);
-        dest.writeValue(title);
-        dest.writeValue(backdropPath);
-        dest.writeValue(popularity);
-        dest.writeValue(voteCount);
-        dest.writeValue(video);
-        dest.writeValue(voteAverage);
-    }
-
-    public Movie(Parcel in) {
-        this.posterPath = ((String) in.readValue((String.class.getClassLoader())));
-        this.adult = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
-        this.overview = ((String) in.readValue((String.class.getClassLoader())));
-        this.releaseDate = ((String) in.readValue((String.class.getClassLoader())));
-        in.readList(this.genreIds, (java.lang.Integer.class.getClassLoader()));
-        this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        this.originalTitle = ((String) in.readValue((String.class.getClassLoader())));
-        this.originalLanguage = ((String) in.readValue((String.class.getClassLoader())));
-        this.title = ((String) in.readValue((String.class.getClassLoader())));
-        this.backdropPath = ((String) in.readValue((String.class.getClassLoader())));
-        this.popularity = ((Double) in.readValue((Double.class.getClassLoader())));
-        this.voteCount = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        this.video = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
-        this.voteAverage = ((Double) in.readValue((Double.class.getClassLoader())));
     }
 }
