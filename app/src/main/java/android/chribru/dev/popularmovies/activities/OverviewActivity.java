@@ -13,11 +13,10 @@ import android.chribru.dev.popularmovies.R;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ImageView;
-import android.widget.Toast;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +32,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     private int activityLabelId;
 
     private OverviewAdapter adapter;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +40,9 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         setContentView(R.layout.activity_overview);
 
         createUiReferences();
+
+        toolbar = findViewById(R.id.overview_toolbar);
+        setSupportActionBar(toolbar);
 
         movieClient = new MovieClient(Constants.API_KEY);
 
