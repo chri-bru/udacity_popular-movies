@@ -10,6 +10,7 @@
         android:id="@+id/overview_toolbar"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
+        android:theme="@style/ToolbarTheme"
         xmlns:android="http://schemas.android.com/apk/res/android" />
 
     <android.support.v7.widget.RecyclerView

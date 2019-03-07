@@ -115,7 +115,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     @Override
     public void onClick(Movie movie) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
-        intent.putExtra(Constants.MOVIE_PARCELABLE, movie);
+        intent.putExtra(Constants.MOVIE_ID_PARCELABLE, movie.getId());
         startActivity(intent);
     }
 

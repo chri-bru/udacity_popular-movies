@@ -1,6 +1,7 @@
 package android.chribru.dev.popularmovies.network;
 
 import android.chribru.dev.popularmovies.api.TheMovieDbMovieApi;
+import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.models.Results;
 
 import retrofit2.Call;
@@ -28,5 +29,13 @@ public class MovieClient {
      */
     public Call<Results> getTopRatedMovies(int page) {
         return movieApi.topRatedMovieList(page);
+    }
+
+    /**
+     * Returns all known details of the movie.
+     * @param id the id of the movie
+     */
+    public Call<Movie> getMovieDetails(int id) {
+        return movieApi.movieDetails(id);
     }
 }

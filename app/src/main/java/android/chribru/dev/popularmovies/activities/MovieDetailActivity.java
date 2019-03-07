@@ -2,19 +2,32 @@ package android.chribru.dev.popularmovies.activities;
 
 import android.chribru.dev.popularmovies.R;
 import android.chribru.dev.popularmovies.data.Constants;
+import android.chribru.dev.popularmovies.models.Genre;
 import android.chribru.dev.popularmovies.models.Movie;
+import android.chribru.dev.popularmovies.network.MovieClient;
 import android.chribru.dev.popularmovies.utils.TheMoviePathResolver;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class MovieDetailActivity extends AppCompatActivity {
 
+    private MovieClient client;
     private Movie movie;
 
     // UI bindings
@@ -36,13 +49,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        if (savedInstanceState != null) {
-            movie = savedInstanceState.getParcelable(Constants.MOVIE_PARCELABLE);
-        } else {
-            movie = getIntent().getParcelableExtra(Constants.MOVIE_PARCELABLE);
-        }
+        client = new MovieClient(Constants.API_KEY);
 
-        setBindings();
+        Intent intent = getIntent();
+
+        if (intent.hasExtra(Constants.MOVIE_ID_PARCELABLE)) {
+            int movieId = intent.getIntExtra(Constants.MOVIE_ID_PARCELABLE, 0);
+            getMovieDetails(movieId);
+        }
 
         this.setTitle(null);
     }
@@ -51,6 +65,12 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putParcelable(Constants.MOVIE_PARCELABLE, movie);
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+        movie = savedInstanceState.getParcelable(Constants.MOVIE_PARCELABLE);
     }
 
     @Override
@@ -70,11 +90,19 @@ public class MovieDetailActivity extends AppCompatActivity {
         poster = findViewById(R.id.detail_poster_img);
     }
 
-    private void setBindings() {
+    private void getMovieDetails(int id) {
+        Call<Movie> call = client.getMovieDetails(id);
+        call.enqueue(new MovieDetailActivity.MovieCallbackHandler());
+    }
+
+    private void populateUi() {
         title.setText(movie.getTitle());
         releaseDate.setText(movie.getReleaseDate());
-        // length.setText(movie); // not available
-        genres.setText(movie.getGenreIds().toString()); // retrieve names
+        length.setText(movie.getRuntime() + " min");
+
+        String genreNames = TextUtils.join(", ", getGenreNames());
+        genres.setText(genreNames); // retrieve names
+
         userRating.setText(movie.getVoteAverage().toString());
         description.setText(movie.getOverview());
 
@@ -89,5 +117,33 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .load(backdropUri)
                 .placeholder(R.drawable.ic_img_placeholder)
                 .into(backdrop);
+    }
+
+    public List<String> getGenreNames() {
+        List<String> result = new ArrayList<>();
+
+        for (Genre genre : movie.getGenres()) {
+            result.add(genre.getName());
+        }
+
+        return result;
+    }
+
+    /**
+     * Callback handler for handling async requests via Retrofit
+     */
+    private class MovieCallbackHandler implements Callback<Movie> {
+        @Override
+        public void onResponse(Call<Movie> call, Response<Movie> response) {
+            Log.i(this.getClass().getName(), "Request was successful!");
+            movie = response.body();
+            populateUi();
+        }
+
+        @Override
+        public void onFailure(Call<Movie> call, Throwable t) {
+            Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
+            movie = new Movie();
+        }
     }
 }

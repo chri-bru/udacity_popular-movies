@@ -15,8 +15,6 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import java.net.URI;
-
 public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.CellViewHolder> {
 
     private Results results;

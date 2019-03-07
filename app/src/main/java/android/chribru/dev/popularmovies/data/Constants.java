@@ -12,6 +12,10 @@ public class Constants {
      * Constant for putting a movie extra
      */
     public static final String MOVIE_PARCELABLE = "MOVIE";
+    /*
+     * Constant for putting a movie extra
+     */
+    public static final String MOVIE_ID_PARCELABLE = "MOVIE_ID";
 
     /*
      * Constant for putting a results extra

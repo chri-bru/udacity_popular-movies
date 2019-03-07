@@ -62,7 +62,7 @@ public class Results implements Parcelable {
      */
     protected Results(Parcel in) {
         this.page = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        in.readList(this.movies, (android.chribru.dev.popularmovies.models.Movie.class.getClassLoader()));
+        in.readList(this.movies, (Movie.class.getClassLoader()));
         this.totalResults = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.totalPages = ((Integer) in.readValue((Integer.class.getClassLoader())));
     }
