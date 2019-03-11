@@ -17,4 +17,13 @@
         android:id="@+id/rv_overview"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
+    <TextView
+        android:id="@+id/overview_error_msg"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:padding="16dp"
+        android:text="@string/error_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 </LinearLayout>

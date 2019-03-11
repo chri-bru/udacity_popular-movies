@@ -7,12 +7,14 @@ import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.network.MovieClient;
 import android.chribru.dev.popularmovies.utils.TheMoviePathResolver;
 import android.content.Intent;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +42,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private ImageView backdrop;
     private ImageView poster;
     private Toolbar toolbar;
+    private TextView errorMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +82,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void initBindings() {
+        errorMsg = findViewById(R.id.detail_error_msg);
         toolbar = findViewById(R.id.detail_toolbar);
         title = findViewById(R.id.detail_title);
         releaseDate = findViewById(R.id.detail_release_date);
@@ -104,6 +108,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         genres.setText(genreNames); // retrieve names
 
         userRating.setText(movie.getVoteAverage().toString());
+        userRating.setVisibility(View.VISIBLE);
         description.setText(movie.getOverview());
 
         String posterUri = TheMoviePathResolver.getUrl(movie.getPosterPath(), TheMoviePathResolver.SIZE_W154);
@@ -119,7 +124,7 @@ public class MovieDetailActivity extends AppCompatActivity {
                 .into(backdrop);
     }
 
-    public List<String> getGenreNames() {
+    private List<String> getGenreNames() {
         List<String> result = new ArrayList<>();
 
         for (Genre genre : movie.getGenres()) {
@@ -129,6 +134,33 @@ public class MovieDetailActivity extends AppCompatActivity {
         return result;
     }
 
+    private void displayErrorMessage() {
+        setVisibilityOfOverview(false);
+    }
+
+    private void setVisibilityOfOverview(boolean visible) {
+        if (visible) {
+            toggleUiComponentVisibility(View.VISIBLE);
+            errorMsg.setVisibility(View.GONE);
+        } else {
+            toggleUiComponentVisibility(View.GONE);
+            errorMsg.setVisibility(View.VISIBLE);
+        }
+    }
+
+    private void toggleUiComponentVisibility(int visibility) {
+        errorMsg.setVisibility(visibility);
+        toolbar.setVisibility(visibility);
+        title.setVisibility(visibility);
+        releaseDate.setVisibility(visibility);
+        length.setVisibility(visibility);
+        genres.setVisibility(visibility);
+        userRating.setVisibility(visibility);
+        description.setVisibility(visibility);
+        backdrop.setVisibility(visibility);
+        poster.setVisibility(visibility);
+    }
+
     /**
      * Callback handler for handling async requests via Retrofit
      */
@@ -136,8 +168,14 @@ public class MovieDetailActivity extends AppCompatActivity {
         @Override
         public void onResponse(Call<Movie> call, Response<Movie> response) {
             Log.i(this.getClass().getName(), "Request was successful!");
-            movie = response.body();
-            populateUi();
+
+            if (response.isSuccessful()) {
+                movie = response.body();
+                setVisibilityOfOverview(true);
+                populateUi();
+            } else {
+                displayErrorMessage();
+            }
         }
 
         @Override

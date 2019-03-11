@@ -5,7 +5,7 @@ public class Constants {
     /**
      * Key used to retrieve data from The Movie API
      */
-    public static final String API_KEY = "Your API key goes here";
+    public static final String API_KEY = "Your Api key goes here";
 
 
     /*

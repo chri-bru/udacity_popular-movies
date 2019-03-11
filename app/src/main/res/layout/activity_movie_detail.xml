@@ -9,6 +9,7 @@
     tools:context=".activities.MovieDetailActivity">
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/detail_movie_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -50,25 +51,24 @@
             app:layout_constraintTop_toBottomOf="@+id/detail_header" />
 
         <TextView
-            android:id="@+id/detail_release_date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="24dp"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/colorGray"
-            app:layout_constraintStart_toEndOf="@+id/detail_poster_img"
-            app:layout_constraintTop_toBottomOf="@+id/detail_header"
-            tools:text="2019" />
-
-        <TextView
             android:id="@+id/detail_length"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            app:layout_constraintStart_toEndOf="@+id/detail_release_date"
+            app:layout_constraintStart_toEndOf="@+id/detail_poster_img"
             app:layout_constraintTop_toBottomOf="@+id/detail_header"
             tools:text="200min" />
+
+        <TextView
+            android:id="@+id/detail_release_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/colorGray"
+            app:layout_constraintEnd_toEndOf="@+id/detail_user_rating"
+            app:layout_constraintTop_toBottomOf="@+id/detail_header"
+            tools:text="2019" />
 
         <TextView
             android:id="@+id/detail_title"
@@ -80,7 +80,7 @@
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/detail_user_rating"
-            app:layout_constraintStart_toStartOf="@+id/detail_release_date"
+            app:layout_constraintStart_toStartOf="@+id/detail_length"
             app:layout_constraintTop_toBottomOf="@+id/detail_release_date"
             tools:text="The movie" />
 
@@ -104,6 +104,7 @@
             android:background="@drawable/circle"
             android:textColor="@color/colorWhite"
             android:textSize="16sp"
+            android:visibility="invisible"
             app:layout_constraintEnd_toEndOf="@+id/detail_header"
             app:layout_constraintTop_toBottomOf="@+id/detail_title"
             tools:text="9.0" />
@@ -117,6 +118,15 @@
             android:paddingRight="8dp"
             app:layout_constraintTop_toBottomOf="@+id/detail_poster_img"
             tools:text="Lorem ipsum" />
+
+        <TextView
+            android:id="@+id/detail_error_msg"
+            app:layout_constraintTop_toBottomOf="@+id/detail_poster_img"
+            android:visibility="gone"
+            android:text="@string/error_msg"
+            android:padding="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

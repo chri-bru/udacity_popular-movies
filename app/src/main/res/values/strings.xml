@@ -6,6 +6,7 @@
     <!-- UI strings -->
     <string name="overview_title_top_rated">Top Rated Movies</string>
     <string name="overview_title_popular">Popular Movies</string>
+    <string name="error_msg">Something unexpected happened while trying to execute your request. Please try again.</string>
 
     <!-- menu strings -->
     <string name="overview_menu_top_rated">Top Rated</string>

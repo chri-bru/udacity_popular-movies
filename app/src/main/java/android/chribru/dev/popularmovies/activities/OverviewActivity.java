@@ -17,6 +17,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -33,6 +35,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
 
     private OverviewAdapter adapter;
     private Toolbar toolbar;
+    private TextView errorMsg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     }
 
     private void createUiReferences() {
+        errorMsg = findViewById(R.id.overview_error_msg);
         rvOverview = findViewById(R.id.rv_overview);
         rvOverview.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
         adapter = new OverviewAdapter(this, this);
@@ -112,6 +116,20 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         setActivityLabel(R.string.overview_title_top_rated);
     }
 
+    private void displayErrorMessage() {
+        setVisibilityOfOverview(false);
+    }
+
+    private void setVisibilityOfOverview(boolean visible) {
+        if (visible) {
+            rvOverview.setVisibility(View.VISIBLE);
+            errorMsg.setVisibility(View.GONE);
+        } else {
+            rvOverview.setVisibility(View.GONE);
+            errorMsg.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onClick(Movie movie) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
@@ -126,13 +144,19 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         @Override
         public void onResponse(Call<Results> call, Response<Results> response) {
             Log.i(this.getClass().getName(), "Request was successful!");
-            setResults(response.body());
+
+            if (response.isSuccessful()) {
+                setResults(response.body());
+            } else {
+                displayErrorMessage();
+            }
         }
 
         @Override
         public void onFailure(Call<Results> call, Throwable t) {
             Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
             results = new Results();
+            displayErrorMessage();
         }
     }
 
@@ -143,6 +167,12 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     }
 
     private void setResults(Results results) {
+        if (results == null || results.getMovies().size() == 0) {
+            displayErrorMessage();
+            return;
+        }
+
+        setVisibilityOfOverview(true);
         adapter.setResults(null);
         this.results = results;
         adapter.setResults(results);

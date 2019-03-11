@@ -13,6 +13,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".activities.OverviewActivity"
+            android:launchMode="singleTop"
             android:label="@string/title_activity_overview">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
