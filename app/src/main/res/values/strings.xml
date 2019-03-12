@@ -11,4 +11,12 @@
     <!-- menu strings -->
     <string name="overview_menu_top_rated">Top Rated</string>
     <string name="overview_menu_popular">Popular</string>
+
+    <!-- IMG content descriptions -->
+    <string name="overview_thumbnail_description">The movie poster is used as a thumbnail.</string>
+    <string name="detail_backdrop_description">The movie backdrop is used here.</string>
+    <string name="detail_thumbnail_description">The movie poster is used as a thumbnail.</string>
+
+    <!-- Movie details -->
+    <string name="movie_runtime">%1$s min</string>
 </resources>

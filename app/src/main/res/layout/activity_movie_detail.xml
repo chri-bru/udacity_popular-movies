@@ -11,7 +11,7 @@
     <android.support.constraint.ConstraintLayout
         android:id="@+id/detail_movie_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <android.support.v7.widget.Toolbar
             android:id="@+id/detail_toolbar"
@@ -37,7 +37,7 @@
                 android:layout_height="225dp"
                 android:padding="0dp"
                 android:scaleType="matrix"
-                android:contentDescription="Backdrop image" />
+                android:contentDescription="@string/detail_backdrop_description" />
         </FrameLayout>
 
         <ImageView
@@ -46,7 +46,7 @@
             android:layout_height="125dp"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:contentDescription="Poster image"
+            android:contentDescription="@string/detail_thumbnail_description"
             app:layout_constraintStart_toStartOf="@+id/detail_header"
             app:layout_constraintTop_toBottomOf="@+id/detail_header" />
 

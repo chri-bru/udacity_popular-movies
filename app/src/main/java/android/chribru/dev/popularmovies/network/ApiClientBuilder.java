@@ -1,5 +1,7 @@
 package android.chribru.dev.popularmovies.network;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.io.IOException;
 
 import okhttp3.HttpUrl;
@@ -50,7 +52,7 @@ public class ApiClientBuilder {
      * @param apiKey the API key to append to each request
      * @return a Retrofit client
      */
-    public Retrofit getClientWithApikey(String apiKey) {
+    public Retrofit getClientWithApiKey(String apiKey) {
         OkHttpClient client = new OkHttpClient.Builder()
                 .addInterceptor(new ApiKeyInterceptor(apiKey))
                 .build();
@@ -68,17 +70,18 @@ public class ApiClientBuilder {
      * Custom interceptor for adding the api key query parameter
      */
     private class ApiKeyInterceptor implements Interceptor {
-        private String apiKey;
+        private final String apiKey;
 
-        public ApiKeyInterceptor(String key) {
+        ApiKeyInterceptor(String key) {
             apiKey = key;
         }
 
         /**
          * Intercepts the request to add the API key to it
          */
+        @NotNull
         @Override
-        public Response intercept(Chain chain) throws IOException {
+        public Response intercept(@NotNull Chain chain) throws IOException {
             Request request = chain.request();
             HttpUrl url = request.url().newBuilder()
                     .addQueryParameter("api_key", apiKey).build();

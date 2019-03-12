@@ -7,21 +7,22 @@ import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.network.MovieClient;
 import android.chribru.dev.popularmovies.utils.TheMoviePathResolver;
 import android.content.Intent;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Menu;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -50,7 +51,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_movie_detail);
         initBindings();
         setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         client = new MovieClient(Constants.API_KEY);
 
@@ -76,11 +77,6 @@ public class MovieDetailActivity extends AppCompatActivity {
         movie = savedInstanceState.getParcelable(Constants.MOVIE_PARCELABLE);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-
     private void initBindings() {
         errorMsg = findViewById(R.id.detail_error_msg);
         toolbar = findViewById(R.id.detail_toolbar);
@@ -102,7 +98,7 @@ public class MovieDetailActivity extends AppCompatActivity {
     private void populateUi() {
         title.setText(movie.getTitle());
         releaseDate.setText(movie.getReleaseDate());
-        length.setText(movie.getRuntime() + " min");
+        length.setText(getString(R.string.movie_runtime, movie.getRuntime().toString()));
 
         String genreNames = TextUtils.join(", ", getGenreNames());
         genres.setText(genreNames); // retrieve names
@@ -166,7 +162,7 @@ public class MovieDetailActivity extends AppCompatActivity {
      */
     private class MovieCallbackHandler implements Callback<Movie> {
         @Override
-        public void onResponse(Call<Movie> call, Response<Movie> response) {
+        public void onResponse(@NotNull Call<Movie> call, @NotNull Response<Movie> response) {
             Log.i(this.getClass().getName(), "Request was successful!");
 
             if (response.isSuccessful()) {
@@ -179,7 +175,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         }
 
         @Override
-        public void onFailure(Call<Movie> call, Throwable t) {
+        public void onFailure(@NotNull Call<Movie> call, @NotNull Throwable t) {
             Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
             movie = new Movie();
         }

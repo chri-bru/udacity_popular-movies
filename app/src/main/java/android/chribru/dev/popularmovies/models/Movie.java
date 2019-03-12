@@ -1,6 +1,5 @@
 package android.chribru.dev.popularmovies.models;
 
-import java.util.ArrayList;
 import java.util.List;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -76,9 +75,8 @@ public class Movie implements Parcelable
     @SerializedName("vote_count")
     @Expose
     private Integer voteCount;
+
     public final static Parcelable.Creator<Movie> CREATOR = new Creator<Movie>() {
-
-
         @SuppressWarnings({
                 "unchecked"
         })
@@ -90,13 +88,12 @@ public class Movie implements Parcelable
             return (new Movie[size]);
         }
 
-    }
-            ;
+    };
 
     protected Movie(Parcel in) {
         this.adult = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.backdropPath = ((String) in.readValue((String.class.getClassLoader())));
-        this.belongsToCollection = ((Object) in.readValue((Object.class.getClassLoader())));
+        this.belongsToCollection = in.readValue((Object.class.getClassLoader()));
         this.budget = ((Integer) in.readValue((Integer.class.getClassLoader())));
         in.readList(this.genres, (android.chribru.dev.popularmovies.models.Genre.class.getClassLoader()));
         this.homepage = ((String) in.readValue((String.class.getClassLoader())));
@@ -126,29 +123,29 @@ public class Movie implements Parcelable
     }
 
     /**
-     *
-     * @param budget
-     * @param genres
-     * @param runtime
-     * @param backdropPath
-     * @param voteCount
-     * @param id
-     * @param title
-     * @param releaseDate
-     * @param posterPath
-     * @param originalTitle
-     * @param voteAverage
-     * @param video
-     * @param popularity
-     * @param revenue
-     * @param status
-     * @param originalLanguage
-     * @param adult
-     * @param imdbId
-     * @param homepage
-     * @param overview
-     * @param belongsToCollection
-     * @param tagline
+     * Constructor with all parameters
+     * @param budget money spent on making the m ovie
+     * @param genres list of movie genres
+     * @param runtime movie duration
+     * @param backdropPath relative path to backdrop image
+     * @param voteCount number of votes
+     * @param id movie id
+     * @param title movie title
+     * @param releaseDate release date of movie
+     * @param posterPath relative path to poster image
+     * @param originalTitle original movie title
+     * @param voteAverage average voting
+     * @param video video links
+     * @param popularity popularity rating
+     * @param revenue generated revenue
+     * @param status movie status
+     * @param originalLanguage original movie language
+     * @param adult flag to indicate adult rating
+     * @param imdbId  ID in imdb database
+     * @param homepage link to homepage
+     * @param overview plot synopsis
+     * @param belongsToCollection references to movies if in collection
+     * @param tagline tag line
      */
     public Movie(Boolean adult, String backdropPath, Object belongsToCollection, Integer budget, List<Genre> genres, String homepage, Integer id, String imdbId, String originalLanguage, String originalTitle, String overview, Double popularity, String posterPath, String releaseDate, Integer revenue, Integer runtime, String status, String tagline, String title, Boolean video, Double voteAverage, Integer voteCount) {
         super();

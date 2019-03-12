@@ -14,9 +14,8 @@ public class Genre implements Parcelable
     @SerializedName("name")
     @Expose
     private String name;
+
     public final static Parcelable.Creator<Genre> CREATOR = new Creator<Genre>() {
-
-
         @SuppressWarnings({
                 "unchecked"
         })
@@ -28,8 +27,7 @@ public class Genre implements Parcelable
             return (new Genre[size]);
         }
 
-    }
-            ;
+    };
 
     protected Genre(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
@@ -38,15 +36,14 @@ public class Genre implements Parcelable
 
     /**
      * No args constructor for use in serialization
-     *
      */
     public Genre() {
     }
 
     /**
-     *
-     * @param id
-     * @param name
+     * Constructor with all parameters
+     * @param id genre ide
+     * @param name genre name
      */
     public Genre(Integer id, String name) {
         super();

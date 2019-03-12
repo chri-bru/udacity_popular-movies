@@ -7,10 +7,10 @@ import android.chribru.dev.popularmovies.models.Results;
 import retrofit2.Call;
 
 public class MovieClient {
-    TheMovieDbMovieApi movieApi;
+    private final TheMovieDbMovieApi movieApi;
 
     public MovieClient(String apiKey) {
-        movieApi = ApiClientBuilder.getBuilder().getClientWithApikey(apiKey).create(TheMovieDbMovieApi.class);
+        movieApi = ApiClientBuilder.getBuilder().getClientWithApiKey(apiKey).create(TheMovieDbMovieApi.class);
     }
 
     /**

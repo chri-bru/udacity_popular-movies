@@ -19,8 +19,8 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.CellVi
 
     private Results results;
 
-    private OverviewAdapterOnClickHandler onClickHandler;
-    private Context context;
+    private final OverviewAdapterOnClickHandler onClickHandler;
+    private final Context context;
 
     public OverviewAdapter(OverviewAdapterOnClickHandler handler, Context context) {
         this.onClickHandler = handler;
@@ -59,7 +59,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.CellVi
     public class CellViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final ImageView thumbnail;
 
-        public CellViewHolder(@NonNull View itemView) {
+        CellViewHolder(@NonNull View itemView) {
             super(itemView);
             thumbnail = itemView.findViewById(R.id.iv_overview_thumbnail);
             itemView.setOnClickListener(this);

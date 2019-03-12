@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import org.jetbrains.annotations.NotNull;
+
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -34,7 +36,6 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     private int activityLabelId;
 
     private OverviewAdapter adapter;
-    private Toolbar toolbar;
     private TextView errorMsg;
 
     @Override
@@ -44,7 +45,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
 
         createUiReferences();
 
-        toolbar = findViewById(R.id.overview_toolbar);
+        Toolbar toolbar = findViewById(R.id.overview_toolbar);
         setSupportActionBar(toolbar);
 
         movieClient = new MovieClient(Constants.API_KEY);
@@ -142,7 +143,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
      */
     private class MovieCallbackHandler implements Callback<Results> {
         @Override
-        public void onResponse(Call<Results> call, Response<Results> response) {
+        public void onResponse(@NotNull Call<Results> call, @NotNull Response<Results> response) {
             Log.i(this.getClass().getName(), "Request was successful!");
 
             if (response.isSuccessful()) {
@@ -153,7 +154,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         }
 
         @Override
-        public void onFailure(Call<Results> call, Throwable t) {
+        public void onFailure(@NotNull Call<Results> call, @NotNull Throwable t) {
             Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
             results = new Results();
             displayErrorMessage();
