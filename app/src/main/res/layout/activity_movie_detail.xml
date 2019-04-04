@@ -8,12 +8,12 @@
     android:fitsSystemWindows="true"
     tools:context=".activities.MovieDetailActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/detail_movie_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <android.support.v7.widget.Toolbar
+        <Toolbar
             android:id="@+id/detail_toolbar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent"
@@ -128,5 +128,5 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

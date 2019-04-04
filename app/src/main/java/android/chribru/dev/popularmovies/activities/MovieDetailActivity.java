@@ -4,33 +4,25 @@ import android.chribru.dev.popularmovies.R;
 import android.chribru.dev.popularmovies.data.Constants;
 import android.chribru.dev.popularmovies.models.Genre;
 import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.network.MovieClient;
 import android.chribru.dev.popularmovies.utils.TheMoviePathResolver;
+import android.chribru.dev.popularmovies.viewmodels.MovieDetailViewModel;
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.bumptech.glide.Glide;
-
-import org.jetbrains.annotations.NotNull;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProviders;
 
 public class MovieDetailActivity extends AppCompatActivity {
 
-    private MovieClient client;
+    private MovieDetailViewModel viewModel;
     private Movie movie;
 
     // UI bindings
@@ -42,7 +34,6 @@ public class MovieDetailActivity extends AppCompatActivity {
     private TextView description;
     private ImageView backdrop;
     private ImageView poster;
-    private Toolbar toolbar;
     private TextView errorMsg;
 
     @Override
@@ -50,10 +41,8 @@ public class MovieDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_detail);
         initBindings();
-        setSupportActionBar(toolbar);
-        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        client = new MovieClient(Constants.API_KEY);
+        viewModel = ViewModelProviders.of(this).get(MovieDetailViewModel.class);
 
         Intent intent = getIntent();
 
@@ -79,7 +68,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private void initBindings() {
         errorMsg = findViewById(R.id.detail_error_msg);
-        toolbar = findViewById(R.id.detail_toolbar);
         title = findViewById(R.id.detail_title);
         releaseDate = findViewById(R.id.detail_release_date);
         length = findViewById(R.id.detail_length);
@@ -91,11 +79,21 @@ public class MovieDetailActivity extends AppCompatActivity {
     }
 
     private void getMovieDetails(int id) {
-        Call<Movie> call = client.getMovieDetails(id);
-        call.enqueue(new MovieDetailActivity.MovieCallbackHandler());
+        viewModel.getMovieDetails(id).observe(this, movie1 -> {
+                movie = movie1;
+                populateUi();
+            }
+        );
     }
 
     private void populateUi() {
+        if (movie == null) {
+            displayErrorMessage();
+            return;
+        }
+
+        setVisibilityOfOverview(true);
+
         title.setText(movie.getTitle());
         releaseDate.setText(movie.getReleaseDate());
         length.setText(getString(R.string.movie_runtime, movie.getRuntime().toString()));
@@ -146,7 +144,6 @@ public class MovieDetailActivity extends AppCompatActivity {
 
     private void toggleUiComponentVisibility(int visibility) {
         errorMsg.setVisibility(visibility);
-        toolbar.setVisibility(visibility);
         title.setVisibility(visibility);
         releaseDate.setVisibility(visibility);
         length.setVisibility(visibility);
@@ -155,30 +152,5 @@ public class MovieDetailActivity extends AppCompatActivity {
         description.setVisibility(visibility);
         backdrop.setVisibility(visibility);
         poster.setVisibility(visibility);
-    }
-
-    /**
-     * Callback handler for handling async requests via Retrofit
-     */
-    private class MovieCallbackHandler implements Callback<Movie> {
-        @Override
-        public void onResponse(@NotNull Call<Movie> call, @NotNull Response<Movie> response) {
-            Log.i(this.getClass().getName(), "Request was successful!");
-
-            if (response.isSuccessful()) {
-                movie = response.body();
-                setVisibilityOfOverview(true);
-                populateUi();
-            } else {
-                displayErrorMessage();
-            }
-        }
-
-        @Override
-        public void onFailure(@NotNull Call<Movie> call, @NotNull Throwable t) {
-            Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
-            movie = new Movie();
-            displayErrorMessage();
-        }
     }
 }

@@ -6,22 +6,21 @@ import android.chribru.dev.popularmovies.interfaces.OverviewAdapterOnClickHandle
 import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.models.Results;
 import android.chribru.dev.popularmovies.network.MovieClient;
+import android.chribru.dev.popularmovies.viewmodels.MoviesViewModel;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.chribru.dev.popularmovies.R;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-
 import org.jetbrains.annotations.NotNull;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,9 +30,9 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     // UI bindings
     private RecyclerView rvOverview;
 
-    private MovieClient movieClient;
     private Results results;
     private int activityLabelId;
+    MoviesViewModel viewModel;
 
     private OverviewAdapter adapter;
     private TextView errorMsg;
@@ -45,10 +44,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
 
         createUiReferences();
 
-        Toolbar toolbar = findViewById(R.id.overview_toolbar);
-        setSupportActionBar(toolbar);
-
-        movieClient = new MovieClient(Constants.API_KEY);
+        viewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
 
         if (savedInstanceState == null) {
             populateUi();
@@ -73,7 +69,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     private void createUiReferences() {
         errorMsg = findViewById(R.id.overview_error_msg);
         rvOverview = findViewById(R.id.rv_overview);
-        rvOverview.setLayoutManager(new GridLayoutManager(this, 2, LinearLayoutManager.VERTICAL, false));
+        rvOverview.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
         adapter = new OverviewAdapter(this, this);
         rvOverview.setAdapter(adapter);
     }
@@ -106,15 +102,17 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     }
 
     private void getPopularMovies(int page) {
-        Call<Results> call = movieClient.getPopularMovies(page);
-        call.enqueue(new MovieCallbackHandler());
-        setActivityLabel(R.string.overview_title_popular);
+        viewModel.getPopularMovies(page).observe(this, results -> {
+            setResults(results);
+            setActivityLabel(R.string.overview_title_popular);
+        });
     }
 
     private void getTopRatedMovies(int page) {
-        Call<Results> call = movieClient.getTopRatedMovies(page);
-        call.enqueue(new MovieCallbackHandler());
-        setActivityLabel(R.string.overview_title_top_rated);
+        viewModel.getTopRatedMoviews(page).observe(this, results -> {
+            setResults(results);
+            setActivityLabel(R.string.overview_title_top_rated);
+        });
     }
 
     private void displayErrorMessage() {
@@ -137,30 +135,6 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         intent.putExtra(Constants.MOVIE_ID_PARCELABLE, movie.getId());
         startActivity(intent);
     }
-
-    /**
-     * Callback handler for handling async requests via Retrofit
-     */
-    private class MovieCallbackHandler implements Callback<Results> {
-        @Override
-        public void onResponse(@NotNull Call<Results> call, @NotNull Response<Results> response) {
-            Log.i(this.getClass().getName(), "Request was successful!");
-
-            if (response.isSuccessful()) {
-                setResults(response.body());
-            } else {
-                displayErrorMessage();
-            }
-        }
-
-        @Override
-        public void onFailure(@NotNull Call<Results> call, @NotNull Throwable t) {
-            Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
-            results = new Results();
-            displayErrorMessage();
-        }
-    }
-
 
     private void setActivityLabel(int resourceId) {
         this.activityLabelId = resourceId;

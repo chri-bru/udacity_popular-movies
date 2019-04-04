@@ -1,6 +1,7 @@
 package android.chribru.dev.popularmovies.network;
 
 import android.chribru.dev.popularmovies.api.TheMovieDbMovieApi;
+import android.chribru.dev.popularmovies.data.Constants;
 import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.models.Results;
 
@@ -9,8 +10,8 @@ import retrofit2.Call;
 public class MovieClient {
     private final TheMovieDbMovieApi movieApi;
 
-    public MovieClient(String apiKey) {
-        movieApi = ApiClientBuilder.getBuilder().getClientWithApiKey(apiKey).create(TheMovieDbMovieApi.class);
+    public MovieClient() {
+        movieApi = ApiClientBuilder.getBuilder().getClientWithApiKey(Constants.API_KEY).create(TheMovieDbMovieApi.class);
     }
 
     /**
