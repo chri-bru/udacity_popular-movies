@@ -178,6 +178,7 @@ public class MovieDetailActivity extends AppCompatActivity {
         public void onFailure(@NotNull Call<Movie> call, @NotNull Throwable t) {
             Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
             movie = new Movie();
+            displayErrorMessage();
         }
     }
 }
