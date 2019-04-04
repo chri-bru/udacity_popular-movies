@@ -1,11 +1,13 @@
 package android.chribru.dev.popularmovies.data;
 
+import android.chribru.dev.popularmovies.BuildConfig;
+
 public class Constants {
 
     /**
      * Key used to retrieve data from The Movie API
      */
-    public static final String API_KEY = "Your Api key goes here";
+    public static final String API_KEY = BuildConfig.THE_MOVIE_DB_API_TOKEN;
 
 
     /*
