@@ -5,31 +5,24 @@ import android.chribru.dev.popularmovies.data.Constants;
 import android.chribru.dev.popularmovies.databinding.ActivityOverviewBinding;
 import android.chribru.dev.popularmovies.interfaces.OverviewAdapterOnClickHandler;
 import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.models.Results;
-import android.chribru.dev.popularmovies.network.MovieClient;
+import android.chribru.dev.popularmovies.models.MovieResults;
 import android.chribru.dev.popularmovies.viewmodels.MoviesViewModel;
 import android.content.Intent;
 import android.os.Bundle;
 import android.chribru.dev.popularmovies.R;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.TextView;
-import org.jetbrains.annotations.NotNull;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class OverviewActivity extends AppCompatActivity implements OverviewAdapterOnClickHandler {
 
-    private Results results;
+    private MovieResults movieResults;
     private int activityLabelId;
     private MoviesViewModel viewModel;
     private OverviewAdapter adapter;
@@ -60,15 +53,15 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(Constants.RESULTS_PARCELABLE, results);
+        outState.putParcelable(Constants.RESULTS_PARCELABLE, movieResults);
         outState.putInt(Constants.ACTIVITY_LABEL, activityLabelId);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        Results savedResults = savedInstanceState.getParcelable(Constants.RESULTS_PARCELABLE);
-        setResults(savedResults);
+        MovieResults savedMovieResults = savedInstanceState.getParcelable(Constants.RESULTS_PARCELABLE);
+        setMovieResults(savedMovieResults);
         setActivityLabel(savedInstanceState.getInt(Constants.ACTIVITY_LABEL));
     }
 
@@ -101,14 +94,14 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
 
     private void getPopularMovies(int page) {
         viewModel.getPopularMovies(page).observe(this, results -> {
-            setResults(results);
+            setMovieResults(results);
             setActivityLabel(R.string.overview_title_popular);
         });
     }
 
     private void getTopRatedMovies(int page) {
         viewModel.getTopRatedMoviews(page).observe(this, results -> {
-            setResults(results);
+            setMovieResults(results);
             setActivityLabel(R.string.overview_title_top_rated);
         });
     }
@@ -139,15 +132,15 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         binding.overviewToolbar.setTitle(getString(activityLabelId));
     }
 
-    private void setResults(Results results) {
-        if (results == null || results.getMovies().size() == 0) {
+    private void setMovieResults(MovieResults movieResults) {
+        if (movieResults == null || movieResults.getMovies().size() == 0) {
             displayErrorMessage();
             return;
         }
 
         setVisibilityOfOverview(true);
-        adapter.setResults(null);
-        this.results = results;
-        adapter.setResults(results);
+        adapter.setMovieResults(null);
+        this.movieResults = movieResults;
+        adapter.setMovieResults(movieResults);
     }
 }

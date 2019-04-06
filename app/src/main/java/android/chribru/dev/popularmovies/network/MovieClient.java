@@ -3,7 +3,9 @@ package android.chribru.dev.popularmovies.network;
 import android.chribru.dev.popularmovies.api.TheMovieDbMovieApi;
 import android.chribru.dev.popularmovies.data.Constants;
 import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.models.Results;
+import android.chribru.dev.popularmovies.models.MovieResults;
+import android.chribru.dev.popularmovies.models.ReviewResults;
+import android.chribru.dev.popularmovies.models.VideoResults;
 
 import retrofit2.Call;
 
@@ -19,7 +21,7 @@ public class MovieClient {
      * A single page holds 20 movies.
      * @param page the page of the results
      */
-    public Call<Results> getPopularMovies(int page) {
+    public Call<MovieResults> getPopularMovies(int page) {
         return movieApi.popularMovieList(page);
     }
 
@@ -28,7 +30,7 @@ public class MovieClient {
      * A single page holds 20 movies.
      * @param page the page of the results
      */
-    public Call<Results> getTopRatedMovies(int page) {
+    public Call<MovieResults> getTopRatedMovies(int page) {
         return movieApi.topRatedMovieList(page);
     }
 
@@ -38,5 +40,23 @@ public class MovieClient {
      */
     public Call<Movie> getMovieDetails(int id) {
         return movieApi.movieDetails(id);
+    }
+
+    /**
+     * Returns videos for a given movie.
+     * @param id the id of the movie
+     * @param language the language of the requested videos
+     */
+    public Call<VideoResults> getVideosForMovie(int id, String language) {
+        return movieApi.videos(id, language);
+    }
+
+    /**
+     * Returns reviews for a given movie.
+     * @param id the id of the movie
+     * @param page the page of the results
+     */
+    public Call<ReviewResults> getReviewsForMovie(int id, int page) {
+        return movieApi.reviews(id, page);
     }
 }

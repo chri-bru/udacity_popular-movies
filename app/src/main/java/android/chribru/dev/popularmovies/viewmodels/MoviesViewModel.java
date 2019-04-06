@@ -1,7 +1,7 @@
 package android.chribru.dev.popularmovies.viewmodels;
 
 import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.models.Results;
+import android.chribru.dev.popularmovies.models.MovieResults;
 import android.chribru.dev.popularmovies.repositories.MovieRepository;
 
 import androidx.lifecycle.LiveData;
@@ -18,11 +18,11 @@ public class MoviesViewModel extends ViewModel {
         this.repository = MovieRepository.getInstance();
     }
 
-    public LiveData<Results> getPopularMovies(int page) {
+    public LiveData<MovieResults> getPopularMovies(int page) {
         return repository.getPopularMovies(page);
     }
 
-    public LiveData<Results> getTopRatedMoviews(int page) {
+    public LiveData<MovieResults> getTopRatedMoviews(int page) {
         return repository.getTopRatedMovies(page);
     }
 }

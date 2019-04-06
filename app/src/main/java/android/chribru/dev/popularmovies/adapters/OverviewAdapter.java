@@ -3,7 +3,7 @@ package android.chribru.dev.popularmovies.adapters;
 import android.chribru.dev.popularmovies.R;
 import android.chribru.dev.popularmovies.interfaces.OverviewAdapterOnClickHandler;
 import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.models.Results;
+import android.chribru.dev.popularmovies.models.MovieResults;
 import android.chribru.dev.popularmovies.utils.TheMoviePathResolver;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.CellViewHolder> {
 
-    private Results results;
+    private MovieResults movieResults;
 
     private final OverviewAdapterOnClickHandler onClickHandler;
     private final Context context;
@@ -38,7 +38,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.CellVi
 
     @Override
     public void onBindViewHolder(@NonNull CellViewHolder cellViewHolder, int i) {
-        Movie movie = results.getMovies().get(i);
+        Movie movie = movieResults.getMovies().get(i);
         String uri = TheMoviePathResolver.getUrl(movie.getPosterPath(), TheMoviePathResolver.SIZE_W154);
         Glide.with(context)
                 .load(uri)
@@ -49,11 +49,11 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.CellVi
 
     @Override
     public int getItemCount() {
-        return results == null ? 0 : results.getMovies().size();
+        return movieResults == null ? 0 : movieResults.getMovies().size();
     }
 
-    public void setResults(Results results) {
-        this.results = results;
+    public void setMovieResults(MovieResults movieResults) {
+        this.movieResults = movieResults;
         notifyDataSetChanged();
     }
 
@@ -68,7 +68,7 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.CellVi
 
         @Override
         public void onClick(View v) {
-            Movie movie = results.getMovies().get(getAdapterPosition());
+            Movie movie = movieResults.getMovies().get(getAdapterPosition());
             onClickHandler.onClick(movie);
         }
     }

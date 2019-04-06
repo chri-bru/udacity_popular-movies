@@ -9,7 +9,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Results implements Parcelable {
+public class MovieResults implements Parcelable {
 
     @SerializedName("page")
     @Expose
@@ -24,13 +24,13 @@ public class Results implements Parcelable {
     @Expose
     private Integer totalPages;
 
-    public final static Parcelable.Creator<Results> CREATOR = new Creator<Results>() {
-        public Results createFromParcel(Parcel in) {
-            return new Results(in);
+    public final static Parcelable.Creator<MovieResults> CREATOR = new Creator<MovieResults>() {
+        public MovieResults createFromParcel(Parcel in) {
+            return new MovieResults(in);
         }
 
-        public Results[] newArray(int size) {
-            return (new Results[size]);
+        public MovieResults[] newArray(int size) {
+            return (new MovieResults[size]);
         }
     };
 
@@ -38,7 +38,7 @@ public class Results implements Parcelable {
      * No args constructor for use in serialization
      *
      */
-    public Results() {
+    public MovieResults() {
     }
 
     /**
@@ -48,7 +48,7 @@ public class Results implements Parcelable {
      * @param page page number
      * @param totalPages total number of pages
      */
-    public Results(Integer page, List<Movie> movies, Integer totalResults, Integer totalPages) {
+    public MovieResults(Integer page, List<Movie> movies, Integer totalResults, Integer totalPages) {
         super();
         this.page = page;
         this.movies = movies;
@@ -60,7 +60,7 @@ public class Results implements Parcelable {
      * Constructor for Parcelable
      * @param in Parcel to use to initialize the object with
      */
-    protected Results(Parcel in) {
+    protected MovieResults(Parcel in) {
         this.page = ((Integer) in.readValue((Integer.class.getClassLoader())));
         in.readList(this.movies, (Movie.class.getClassLoader()));
         this.totalResults = ((Integer) in.readValue((Integer.class.getClassLoader())));
@@ -87,7 +87,7 @@ public class Results implements Parcelable {
         this.page = page;
     }
 
-    public Results withPage(Integer page) {
+    public MovieResults withPage(Integer page) {
         this.page = page;
         return this;
     }
@@ -100,7 +100,7 @@ public class Results implements Parcelable {
         this.movies = movies;
     }
 
-    public Results withResults(List<Movie> movies) {
+    public MovieResults withResults(List<Movie> movies) {
         this.movies = movies;
         return this;
     }
@@ -113,7 +113,7 @@ public class Results implements Parcelable {
         this.totalResults = totalResults;
     }
 
-    public Results withTotalResults(Integer totalResults) {
+    public MovieResults withTotalResults(Integer totalResults) {
         this.totalResults = totalResults;
         return this;
     }
@@ -126,7 +126,7 @@ public class Results implements Parcelable {
         this.totalPages = totalPages;
     }
 
-    public Results withTotalPages(Integer totalPages) {
+    public MovieResults withTotalPages(Integer totalPages) {
         this.totalPages = totalPages;
         return this;
     }
