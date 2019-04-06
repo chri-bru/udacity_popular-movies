@@ -1,9 +1,13 @@
 package android.chribru.dev.popularmovies.activities;
 
 import android.chribru.dev.popularmovies.R;
+import android.chribru.dev.popularmovies.adapters.ReviewAdapter;
+import android.chribru.dev.popularmovies.adapters.VideoAdapter;
 import android.chribru.dev.popularmovies.data.Constants;
 import android.chribru.dev.popularmovies.databinding.ActivityMovieDetailBinding;
+import android.chribru.dev.popularmovies.interfaces.VideoOnClickHandler;
 import android.chribru.dev.popularmovies.models.Movie;
+import android.chribru.dev.popularmovies.models.Video;
 import android.chribru.dev.popularmovies.viewmodels.MovieDetailViewModel;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,13 +18,17 @@ import android.view.View;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-public class MovieDetailActivity extends AppCompatActivity {
+public class MovieDetailActivity extends AppCompatActivity implements VideoOnClickHandler {
 
     private MovieDetailViewModel viewModel;
     private Movie movie;
 
     private ActivityMovieDetailBinding binding;
+    private ReviewAdapter reviewAdapter;
+    private VideoAdapter videoAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +50,17 @@ public class MovieDetailActivity extends AppCompatActivity {
             int movieId = intent.getIntExtra(Constants.MOVIE_ID_PARCELABLE, 0);
             getMovieDetails(movieId);
         }
+
+        // set adapters
+        // review
+        binding.rvReviews.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        reviewAdapter = new ReviewAdapter(this);
+        binding.rvReviews.setAdapter(reviewAdapter);
+
+        // videos
+        binding.rvTrailers.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        videoAdapter = new VideoAdapter(this, this);
+        binding.rvTrailers.setAdapter(videoAdapter);
 
         this.setTitle(null);
     }
@@ -125,5 +144,11 @@ public class MovieDetailActivity extends AppCompatActivity {
         binding.detailDescription.setVisibility(visibility);
         binding.detailBackdropImg.setVisibility(visibility);
         binding.detailPosterImg.setVisibility(visibility);
+    }
+
+    // on click for videos
+    @Override
+    public void onClick(Video video) {
+
     }
 }

@@ -13,8 +13,8 @@
 
 
     <ScrollView
-        android:layout_height="match_parent"
         android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         tools:context=".activities.MovieDetailActivity">
 
@@ -25,12 +25,12 @@
 
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/detail_toolbar"
-                android:layout_height="wrap_content"
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:theme="@style/ToolbarTheme"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <FrameLayout
                 android:id="@+id/detail_header"
@@ -42,45 +42,45 @@
 
                 <ImageView
                     android:id="@+id/detail_backdrop_img"
-                    app:url="@{movie.getBackdropPath()}"
-                    app:size="@{TheMoviePathResolver.SIZE_W500}"
                     android:layout_width="match_parent"
                     android:layout_height="225dp"
+                    android:contentDescription="@string/detail_backdrop_description"
                     android:padding="0dp"
                     android:scaleType="matrix"
-                    android:contentDescription="@string/detail_backdrop_description" />
+                    app:size="@{TheMoviePathResolver.SIZE_W500}"
+                    app:url="@{movie.getBackdropPath()}" />
 
             </FrameLayout>
 
             <ImageView
                 android:id="@+id/detail_poster_img"
-                app:url="@{movie.getPosterPath()}"
-                app:size="@{TheMoviePathResolver.SIZE_W185}"
                 android:layout_width="80dp"
                 android:layout_height="125dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:contentDescription="@string/detail_thumbnail_description"
                 app:layout_constraintStart_toStartOf="@+id/detail_header"
-                app:layout_constraintTop_toBottomOf="@+id/detail_header" />
+                app:layout_constraintTop_toBottomOf="@+id/detail_header"
+                app:size="@{TheMoviePathResolver.SIZE_W185}"
+                app:url="@{movie.getPosterPath()}" />
 
             <TextView
                 android:id="@+id/detail_length"
-                android:text="@{MovieDetailsUtils.transformRuntime(movie, context)}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:text="@{MovieDetailsUtils.transformRuntime(movie, context)}"
                 app:layout_constraintStart_toEndOf="@+id/detail_poster_img"
                 app:layout_constraintTop_toBottomOf="@+id/detail_header"
                 tools:text="200min" />
 
             <TextView
                 android:id="@+id/detail_release_date"
-                android:text="@{MovieDetailsUtils.transformDate(movie.getReleaseDate())}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:text="@{MovieDetailsUtils.transformDate(movie.getReleaseDate())}"
                 android:textColor="@color/colorGray"
                 app:layout_constraintEnd_toEndOf="@+id/detail_user_rating"
                 app:layout_constraintTop_toBottomOf="@+id/detail_header"
@@ -88,12 +88,12 @@
 
             <TextView
                 android:id="@+id/detail_title"
-                android:text="@{movie.getTitle()}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:maxLines="2"
+                android:text="@{movie.getTitle()}"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/detail_user_rating"
@@ -103,11 +103,11 @@
 
             <TextView
                 android:id="@+id/detail_genres"
-                android:text="@{MovieDetailsUtils.transformGenres(movie)}"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:text="@{MovieDetailsUtils.transformGenres(movie)}"
                 app:layout_constraintEnd_toStartOf="@+id/detail_user_rating"
                 app:layout_constraintStart_toStartOf="@+id/detail_title"
                 app:layout_constraintTop_toBottomOf="@+id/detail_title"
@@ -115,12 +115,12 @@
 
             <TextView
                 android:id="@+id/detail_user_rating"
-                android:text="@{movie.getVoteAverage().toString()}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/circle"
+                android:text="@{movie.getVoteAverage().toString()}"
                 android:textColor="@color/colorWhite"
                 android:textSize="16sp"
                 android:visibility="invisible"
@@ -130,23 +130,82 @@
 
             <TextView
                 android:id="@+id/detail_description"
-                android:text="@{movie.getOverview()}"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="24dp"
+                android:layout_marginEnd="16dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
+                android:text="@{movie.getOverview()}"
+                app:layout_constraintEnd_toEndOf="@+id/detail_user_rating"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_poster_img"
                 tools:text="Lorem ipsum" />
 
             <TextView
                 android:id="@+id/detail_error_msg"
-                app:layout_constraintTop_toBottomOf="@+id/detail_poster_img"
-                android:visibility="gone"
-                android:text="@string/error_msg"
-                android:padding="16dp"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="@string/error_msg"
+                android:visibility="gone"
+                app:layout_constraintTop_toBottomOf="@+id/detail_poster_img" />
+
+            <androidx.constraintlayout.widget.Guideline
+                android:id="@+id/guideline"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_begin="297dp" />
+
+            <!-- Divider + Videos -->
+            <View
+                android:id="@+id/divider"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/detail_description" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <!-- Divider + Reviews -->
+            <View
+                android:id="@+id/divider2"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:background="?android:attr/listDivider"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rv_trailers" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>

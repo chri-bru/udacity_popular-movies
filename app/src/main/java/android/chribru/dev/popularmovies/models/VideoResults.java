@@ -14,9 +14,9 @@ public class VideoResults implements Serializable, Parcelable
     @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("results")
+    @SerializedName("videos")
     @Expose
-    private List<Video> results = null;
+    private List<Video> videos = null;
     public final static Parcelable.Creator<VideoResults> CREATOR = new Creator<VideoResults>() {
 
 
@@ -36,7 +36,7 @@ public class VideoResults implements Serializable, Parcelable
 
     protected VideoResults(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        in.readList(this.results, (android.chribru.dev.popularmovies.models.VideoResults.class.getClassLoader()));
+        in.readList(this.videos, (android.chribru.dev.popularmovies.models.VideoResults.class.getClassLoader()));
     }
 
     public VideoResults() {
@@ -50,17 +50,17 @@ public class VideoResults implements Serializable, Parcelable
         this.id = id;
     }
 
-    public List<Video> getResults() {
-        return results;
+    public List<Video> getVideos() {
+        return videos;
     }
 
-    public void setResults(List<Video> results) {
-        this.results = results;
+    public void setVideos(List<Video> results) {
+        this.videos = results;
     }
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(id);
-        dest.writeList(results);
+        dest.writeList(videos);
     }
 
     public int describeContents() {
