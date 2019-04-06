@@ -19,4 +19,5 @@
 
     <!-- Movie details -->
     <string name="movie_runtime">%1$s min</string>
+    <string name="favorites">Favorites</string>
 </resources>

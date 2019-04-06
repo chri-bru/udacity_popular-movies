@@ -3,23 +3,16 @@ package android.chribru.dev.popularmovies.activities;
 import android.chribru.dev.popularmovies.R;
 import android.chribru.dev.popularmovies.data.Constants;
 import android.chribru.dev.popularmovies.databinding.ActivityMovieDetailBinding;
-import android.chribru.dev.popularmovies.models.Genre;
 import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.utils.TheMoviePathResolver;
 import android.chribru.dev.popularmovies.viewmodels.MovieDetailViewModel;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import com.bumptech.glide.Glide;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.ViewModelProviders;
 
 public class MovieDetailActivity extends AppCompatActivity {
@@ -34,6 +27,10 @@ public class MovieDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_detail);
+
+        // set toolbar
+        binding.detailToolbar.inflateMenu(R.menu.details_menu);
+        binding.detailToolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
         this.setSupportActionBar(binding.detailToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -59,6 +56,30 @@ public class MovieDetailActivity extends AppCompatActivity {
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
         movie = savedInstanceState.getParcelable(Constants.MOVIE_PARCELABLE);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.details_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int selectedItem = item.getItemId();
+
+        if (selectedItem == R.id.favorites) {
+            if (item.isCheckable() && !item.isChecked()) {
+                item.setIcon(R.drawable.ic_favorite_black_24dp);
+                item.setChecked(true);
+            } else {
+                item.setIcon(R.drawable.ic_favorite_border_black_24dp);
+                item.setChecked(false);
+            }
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void getMovieDetails(int id) {
