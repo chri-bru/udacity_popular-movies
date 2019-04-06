@@ -2,6 +2,7 @@ package android.chribru.dev.popularmovies.activities;
 
 import android.chribru.dev.popularmovies.adapters.OverviewAdapter;
 import android.chribru.dev.popularmovies.data.Constants;
+import android.chribru.dev.popularmovies.databinding.ActivityOverviewBinding;
 import android.chribru.dev.popularmovies.interfaces.OverviewAdapterOnClickHandler;
 import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.models.Results;
@@ -17,6 +18,7 @@ import android.view.View;
 import android.widget.TextView;
 import org.jetbrains.annotations.NotNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -27,22 +29,26 @@ import retrofit2.Response;
 
 public class OverviewActivity extends AppCompatActivity implements OverviewAdapterOnClickHandler {
 
-    // UI bindings
-    private RecyclerView rvOverview;
-
     private Results results;
     private int activityLabelId;
-    MoviesViewModel viewModel;
-
+    private MoviesViewModel viewModel;
     private OverviewAdapter adapter;
-    private TextView errorMsg;
+    private ActivityOverviewBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_overview);
 
-        createUiReferences();
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_overview);
+
+        // set recycler view
+        binding.rvOverview.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
+        adapter = new OverviewAdapter(this, this);
+        binding.rvOverview.setAdapter(adapter);
+
+        // set toolbar
+        binding.overviewToolbar.inflateMenu(R.menu.overview_menu);
+        binding.overviewToolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
 
         viewModel = ViewModelProviders.of(this).get(MoviesViewModel.class);
 
@@ -64,14 +70,6 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         Results savedResults = savedInstanceState.getParcelable(Constants.RESULTS_PARCELABLE);
         setResults(savedResults);
         setActivityLabel(savedInstanceState.getInt(Constants.ACTIVITY_LABEL));
-    }
-
-    private void createUiReferences() {
-        errorMsg = findViewById(R.id.overview_error_msg);
-        rvOverview = findViewById(R.id.rv_overview);
-        rvOverview.setLayoutManager(new GridLayoutManager(this, 2, RecyclerView.VERTICAL, false));
-        adapter = new OverviewAdapter(this, this);
-        rvOverview.setAdapter(adapter);
     }
 
     private void populateUi() {
@@ -121,11 +119,11 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
 
     private void setVisibilityOfOverview(boolean visible) {
         if (visible) {
-            rvOverview.setVisibility(View.VISIBLE);
-            errorMsg.setVisibility(View.GONE);
+            binding.rvOverview.setVisibility(View.VISIBLE);
+            binding.overviewErrorMsg.setVisibility(View.GONE);
         } else {
-            rvOverview.setVisibility(View.GONE);
-            errorMsg.setVisibility(View.VISIBLE);
+            binding.rvOverview.setVisibility(View.GONE);
+            binding.overviewErrorMsg.setVisibility(View.VISIBLE);
         }
     }
 
@@ -138,7 +136,7 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
 
     private void setActivityLabel(int resourceId) {
         this.activityLabelId = resourceId;
-        this.setTitle(getString(activityLabelId));
+        binding.overviewToolbar.setTitle(getString(activityLabelId));
     }
 
     private void setResults(Results results) {

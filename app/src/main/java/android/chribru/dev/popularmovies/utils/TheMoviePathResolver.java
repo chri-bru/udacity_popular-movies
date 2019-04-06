@@ -13,6 +13,10 @@ public class TheMoviePathResolver {
     public static final String SIZE_ORIGINAL = "original";
 
     public static String getUrl(String relativePath, String size) {
+        if (relativePath == null || relativePath.equals("")) {
+            return "";
+        }
+
         if (!relativePath.startsWith("/")) {
             relativePath = "/" + relativePath;
         }
