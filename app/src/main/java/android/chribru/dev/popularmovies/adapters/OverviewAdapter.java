@@ -44,7 +44,6 @@ public class OverviewAdapter extends RecyclerView.Adapter<OverviewAdapter.CellVi
                 .load(uri)
                 .placeholder(R.drawable.ic_img_placeholder)
                 .into(cellViewHolder.thumbnail);
-
     }
 
     @Override

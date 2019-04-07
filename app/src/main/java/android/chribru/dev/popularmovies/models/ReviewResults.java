@@ -17,9 +17,9 @@ public class ReviewResults implements Serializable, Parcelable
     @SerializedName("page")
     @Expose
     private Integer page;
-    @SerializedName("reviews")
+    @SerializedName("results")
     @Expose
-    private List<Review> reviews = null;
+    private List<Review> results = null;
     @SerializedName("total_pages")
     @Expose
     private Integer totalPages;
@@ -47,7 +47,7 @@ public class ReviewResults implements Serializable, Parcelable
     protected ReviewResults(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.page = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        in.readList(this.reviews, (Review.class.getClassLoader()));
+        in.readList(this.results, (Review.class.getClassLoader()));
         this.totalPages = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.totalResults = ((Integer) in.readValue((Integer.class.getClassLoader())));
     }
@@ -71,12 +71,12 @@ public class ReviewResults implements Serializable, Parcelable
         this.page = page;
     }
 
-    public List<Review> getReviews() {
-        return reviews;
+    public List<Review> getResults() {
+        return results;
     }
 
-    public void setReviews(List<Review> reviews) {
-        this.reviews = reviews;
+    public void setResults(List<Review> results) {
+        this.results = results;
     }
 
     public Integer getTotalPages() {
@@ -98,7 +98,7 @@ public class ReviewResults implements Serializable, Parcelable
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(id);
         dest.writeValue(page);
-        dest.writeList(reviews);
+        dest.writeList(results);
         dest.writeValue(totalPages);
         dest.writeValue(totalResults);
     }

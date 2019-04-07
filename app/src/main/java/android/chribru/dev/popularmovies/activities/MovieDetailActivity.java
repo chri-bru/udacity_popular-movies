@@ -15,6 +15,10 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.material.snackbar.Snackbar;
+
+import java.util.Locale;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import androidx.lifecycle.ViewModelProviders;
@@ -33,24 +37,28 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         binding = DataBindingUtil.setContentView(this, R.layout.activity_movie_detail);
-
-        // set toolbar
-        binding.detailToolbar.inflateMenu(R.menu.details_menu);
-        binding.detailToolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
-        this.setSupportActionBar(binding.detailToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
         viewModel = ViewModelProviders.of(this).get(MovieDetailViewModel.class);
 
+        setUpToolbar();
+        handleIntent();
+        setUpAdapters();
+
+        this.setTitle(null);
+    }
+
+    private void handleIntent() {
         Intent intent = getIntent();
 
         if (intent.hasExtra(Constants.MOVIE_ID_PARCELABLE)) {
             int movieId = intent.getIntExtra(Constants.MOVIE_ID_PARCELABLE, 0);
             getMovieDetails(movieId);
+            getVideos(movieId);
+            getReviews(movieId);
         }
+    }
 
+    private void setUpAdapters() {
         // set adapters
         // review
         binding.rvReviews.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
@@ -58,11 +66,17 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
         binding.rvReviews.setAdapter(reviewAdapter);
 
         // videos
-        binding.rvTrailers.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
+        binding.rvTrailers.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
         videoAdapter = new VideoAdapter(this, this);
         binding.rvTrailers.setAdapter(videoAdapter);
+    }
 
-        this.setTitle(null);
+    private void setUpToolbar() {
+        // set toolbar
+        binding.detailToolbar.inflateMenu(R.menu.details_menu);
+        binding.detailToolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
+        this.setSupportActionBar(binding.detailToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
@@ -110,6 +124,19 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
         );
     }
 
+    private void getVideos(int id) {
+        String locale = Locale.getDefault().getLanguage();
+        viewModel.getVideos(id, locale).observe(this, videoResults -> {
+            videoAdapter.setResults(videoResults);
+        });
+    }
+
+    private void getReviews(int id) {
+        viewModel.getReviews(id, 1).observe(this, reviewResults -> {
+            reviewAdapter.setResults(reviewResults);
+        });
+    }
+
     private void populateUi() {
         if (movie == null) {
             displayErrorMessage();
@@ -149,6 +176,6 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     // on click for videos
     @Override
     public void onClick(Video video) {
-
+        Snackbar.make(binding.movieScrollview, video.getName(), Snackbar.LENGTH_LONG);
     }
 }

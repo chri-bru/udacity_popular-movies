@@ -6,4 +6,5 @@
     <color name="colorGray">#555555</color>
     <color name="colorWhite">#D3D3D3</color>
     <color name="pureWhite">#FFF</color>
+    <color name="colorCard">#D3D3D3</color>
 </resources>
