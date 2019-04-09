@@ -1,12 +1,12 @@
 package android.chribru.dev.popularmovies.viewmodels;
 
+import android.app.Application;
 import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.models.ReviewResults;
 import android.chribru.dev.popularmovies.models.VideoResults;
-import android.chribru.dev.popularmovies.repositories.MovieRepository;
+import android.chribru.dev.popularmovies.persistance.repositories.MovieRepository;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
 public class MovieDetailViewModel extends ViewModel {
@@ -17,8 +17,8 @@ public class MovieDetailViewModel extends ViewModel {
     private LiveData<VideoResults> videos;
     private LiveData<ReviewResults> reviews;
 
-    public MovieDetailViewModel() {
-        this.repository = MovieRepository.getInstance();
+    public MovieDetailViewModel(Application application) {
+        this.repository = new MovieRepository(application);
     }
 
     public LiveData<Movie> getMovieDetails(int id) {

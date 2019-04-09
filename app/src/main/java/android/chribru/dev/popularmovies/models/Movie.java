@@ -6,8 +6,14 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
+@Entity(tableName="movie_table")
 public class Movie implements Parcelable
 {
+    @PrimaryKey(autoGenerate = true)
+    private int roomId;
 
     @SerializedName("adult")
     @Expose
