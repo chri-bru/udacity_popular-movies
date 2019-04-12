@@ -17,9 +17,6 @@ import androidx.room.TypeConverters;
 @TypeConverters({GenreConverter.class})
 public class Movie implements Parcelable
 {
-    @PrimaryKey(autoGenerate = true)
-    private int roomId;
-
     // will be serialized using a type converter
     @SerializedName("genres")
     @Expose
@@ -29,6 +26,9 @@ public class Movie implements Parcelable
     @SerializedName("belongs_to_collection")
     @Expose
     private Object belongsToCollection;
+
+    @SerializedName("isFavorited")
+    private Boolean isFavorited;
 
     @SerializedName("adult")
     @Expose
@@ -42,6 +42,7 @@ public class Movie implements Parcelable
     @SerializedName("homepage")
     @Expose
     private String homepage;
+    @PrimaryKey(autoGenerate = false)
     @SerializedName("id")
     @Expose
     private Integer id;
@@ -365,13 +366,14 @@ public class Movie implements Parcelable
         this.voteCount = voteCount;
     }
 
-    public int getRoomId() {
-        return roomId;
+    public Boolean getFavorited() {
+        return isFavorited == null ? false : isFavorited;
     }
 
-    public void setRoomId(int roomId) {
-        this.roomId = roomId;
+    public void setFavorited(Boolean favorited) {
+        isFavorited = favorited;
     }
+
 
     public void writeToParcel(Parcel dest, int flags) {
         dest.writeValue(adult);

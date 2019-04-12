@@ -33,6 +33,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     private ActivityMovieDetailBinding binding;
     private ReviewAdapter reviewAdapter;
     private VideoAdapter videoAdapter;
+    private Menu currentMenu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +95,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.details_menu, menu);
+        currentMenu = menu;
         return true;
     }
 
@@ -103,11 +105,12 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
 
         if (selectedItem == R.id.favorites) {
             if (item.isCheckable() && !item.isChecked()) {
-                item.setIcon(R.drawable.ic_favorite_black_24dp);
-                item.setChecked(true);
+                setFavoriteIconToChecked(item);
+                addToFavorites();
+
             } else {
-                item.setIcon(R.drawable.ic_favorite_border_black_24dp);
-                item.setChecked(false);
+                setFavoriteIconToUnchecked(item);
+                removeFromFavorites();
             }
             return true;
         }
@@ -137,14 +140,41 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
         });
     }
 
+    private void addToFavorites() {
+        viewModel.addToFavorites(movie);
+    }
+
+    private void removeFromFavorites() {
+        viewModel.removeFromFavorites(movie);
+    }
+
     private void populateUi() {
         if (movie == null) {
             displayErrorMessage();
             return;
         }
-
         setVisibilityOfOverview(true);
         binding.detailUserRating.setVisibility(View.VISIBLE);
+    }
+
+    private void setMenuItem() {
+        if (currentMenu == null) {
+            return;
+        }
+        MenuItem item = currentMenu.getItem(0);
+        if (movie.getFavorited()) {
+            setFavoriteIconToChecked(item);
+        }
+    }
+
+    private void setFavoriteIconToChecked(MenuItem item) {
+        item.setIcon(R.drawable.ic_favorite_black_24dp);
+        item.setChecked(true);
+    }
+
+    private void setFavoriteIconToUnchecked(MenuItem item) {
+        item.setIcon(R.drawable.ic_favorite_border_black_24dp);
+        item.setChecked(false);
     }
 
     private void displayErrorMessage() {

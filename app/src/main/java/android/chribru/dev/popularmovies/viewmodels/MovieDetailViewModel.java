@@ -45,6 +45,11 @@ public class MovieDetailViewModel extends AndroidViewModel {
     }
 
     public void addToFavorites(Movie movie) {
+        movie.setFavorited(true);
         repository.insertToFavorites(movie);
+    }
+
+    public void removeFromFavorites(Movie movie) {
+        repository.deleteFromFavorites(movie);
     }
 }

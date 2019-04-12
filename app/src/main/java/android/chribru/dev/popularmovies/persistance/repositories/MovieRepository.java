@@ -18,6 +18,7 @@ import java.util.List;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Transformations;
 
 public class MovieRepository {
 
@@ -33,8 +34,23 @@ public class MovieRepository {
 
     public LiveData<Movie> getMovieDetails(int id) {
         final MutableLiveData<Movie> data = new MutableLiveData<>();
-        client.getMovieDetails(id).enqueue(new MovieCallbackHandler(data));
-        return data;
+
+        LiveData<Movie> movie = movieDao.getMovie(id);
+        movie.observeForever(movie1 -> {
+            if (movie1 == null) {
+                client.getMovieDetails(id).enqueue(new MovieCallbackHandler(data));
+            } else {
+                data.setValue(movie1);
+            }
+        });
+
+        // favorited movies are already persisted
+        return Transformations.map(data, input -> {
+                    if (input != null && !input.getFavorited()) {
+                        insertMovie(input);
+                    }
+                    return input;
+                });
     }
 
     public LiveData<MovieResults> getPopularMovies(int page) {
@@ -67,6 +83,12 @@ public class MovieRepository {
     }
 
     public void insertToFavorites(Movie movie) {
+        movie.setFavorited(true);
+        new InsertAsyncTask(movieDao).execute(movie);
+    }
+
+    private void insertMovie(Movie movie) {
+        movie.setFavorited(false);
         new InsertAsyncTask(movieDao).execute(movie);
     }
 
@@ -80,6 +102,24 @@ public class MovieRepository {
         @Override
         protected Void doInBackground(Movie... movies) {
             movieDao.insert(movies[0]);
+            return null;
+        }
+    }
+
+    public void deleteFromFavorites(Movie movie) {
+        new DeleteAsysncTask(movieDao).execute(movie);
+    }
+
+    private class DeleteAsysncTask extends AsyncTask<Movie, Void, Void> {
+        private MovieDao movieDao;
+
+        DeleteAsysncTask(MovieDao dao) {
+            movieDao = dao;
+        }
+
+        @Override
+        protected Void doInBackground(Movie... movies) {
+            movieDao.delete(movies[0]);
             return null;
         }
     }
