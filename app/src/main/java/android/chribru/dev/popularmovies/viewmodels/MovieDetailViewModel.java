@@ -6,10 +6,11 @@ import android.chribru.dev.popularmovies.models.ReviewResults;
 import android.chribru.dev.popularmovies.models.VideoResults;
 import android.chribru.dev.popularmovies.persistance.repositories.MovieRepository;
 
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
-public class MovieDetailViewModel extends ViewModel {
+public class MovieDetailViewModel extends AndroidViewModel {
 
     private final MovieRepository repository;
 
@@ -18,6 +19,7 @@ public class MovieDetailViewModel extends ViewModel {
     private LiveData<ReviewResults> reviews;
 
     public MovieDetailViewModel(Application application) {
+        super(application);
         this.repository = new MovieRepository(application);
     }
 
@@ -40,5 +42,9 @@ public class MovieDetailViewModel extends ViewModel {
             reviews = repository.getReviewsForMovie(movieId, page);
         }
         return reviews;
+    }
+
+    public void addToFavorites(Movie movie) {
+        repository.insertToFavorites(movie);
     }
 }

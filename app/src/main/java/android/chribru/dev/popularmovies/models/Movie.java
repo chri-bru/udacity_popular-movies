@@ -1,19 +1,34 @@
 package android.chribru.dev.popularmovies.models;
 
 import java.util.List;
+
+import android.chribru.dev.popularmovies.models.converters.GenreConverter;
 import android.os.Parcel;
 import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
 
 @Entity(tableName="movie_table")
+@TypeConverters({GenreConverter.class})
 public class Movie implements Parcelable
 {
     @PrimaryKey(autoGenerate = true)
     private int roomId;
+
+    // will be serialized using a type converter
+    @SerializedName("genres")
+    @Expose
+    private List<Genre> genres = null;
+
+    @Ignore
+    @SerializedName("belongs_to_collection")
+    @Expose
+    private Object belongsToCollection;
 
     @SerializedName("adult")
     @Expose
@@ -21,15 +36,9 @@ public class Movie implements Parcelable
     @SerializedName("backdrop_path")
     @Expose
     private String backdropPath;
-    @SerializedName("belongs_to_collection")
-    @Expose
-    private Object belongsToCollection;
     @SerializedName("budget")
     @Expose
     private Integer budget;
-    @SerializedName("genres")
-    @Expose
-    private List<Genre> genres = null;
     @SerializedName("homepage")
     @Expose
     private String homepage;
@@ -96,6 +105,7 @@ public class Movie implements Parcelable
 
     };
 
+    @Ignore
     protected Movie(Parcel in) {
         this.adult = ((Boolean) in.readValue((Boolean.class.getClassLoader())));
         this.backdropPath = ((String) in.readValue((String.class.getClassLoader())));
@@ -353,6 +363,14 @@ public class Movie implements Parcelable
 
     public void setVoteCount(Integer voteCount) {
         this.voteCount = voteCount;
+    }
+
+    public int getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(int roomId) {
+        this.roomId = roomId;
     }
 
     public void writeToParcel(Parcel dest, int flags) {

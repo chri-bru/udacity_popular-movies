@@ -8,7 +8,7 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
         release {
@@ -37,8 +37,8 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     // test libraries
     testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.2'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    androidTestImplementation 'androidx.test:runner:1.1.0-alpha4'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.0-alpha4'
     // API related libraries
     implementation 'com.squareup.retrofit2:retrofit:2.5.0'
     implementation 'org.jetbrains:annotations-java5:15.0'
@@ -49,7 +49,7 @@ dependencies {
         transitive = true
     }
     implementation "androidx.lifecycle:lifecycle-extensions:2.0.0"
-    // persistance
+    // persistence
     def room_version = "2.1.0-alpha06"
     implementation "androidx.room:room-runtime:$room_version"
     annotationProcessor "androidx.room:room-compiler:$room_version"

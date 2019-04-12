@@ -89,6 +89,11 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
             return true;
         }
 
+        if (selectedItem == R.id.menu_favorites) {
+            getFavorites();
+            return true;
+        }
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -103,6 +108,13 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         viewModel.getTopRatedMoviews(page).observe(this, results -> {
             setMovieResults(results);
             setActivityLabel(R.string.overview_title_top_rated);
+        });
+    }
+
+    private void getFavorites() {
+        viewModel.getFavorites().observe(this, results -> {
+            setMovieResults(results);
+            setActivityLabel(R.string.favorites);
         });
     }
 

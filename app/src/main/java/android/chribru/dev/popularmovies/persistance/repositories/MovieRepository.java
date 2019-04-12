@@ -9,6 +9,7 @@ import android.chribru.dev.popularmovies.network.MovieClient;
 import android.chribru.dev.popularmovies.persistance.MovieDao;
 import android.chribru.dev.popularmovies.persistance.MovieRoomDatabase;
 import android.chribru.dev.popularmovies.persistance.repositories.handlers.MovieCallbackHandler;
+import android.chribru.dev.popularmovies.persistance.repositories.handlers.MovieResultsCallbackHandler;
 import android.chribru.dev.popularmovies.persistance.repositories.handlers.ReviewsCallbackHandler;
 import android.chribru.dev.popularmovies.persistance.repositories.handlers.VideosCallbackHandler;
 import android.os.AsyncTask;
@@ -32,19 +33,19 @@ public class MovieRepository {
 
     public LiveData<Movie> getMovieDetails(int id) {
         final MutableLiveData<Movie> data = new MutableLiveData<>();
-        client.getMovieDetails(id).enqueue(new MovieCallbackHandler<>(data));
+        client.getMovieDetails(id).enqueue(new MovieCallbackHandler(data));
         return data;
     }
 
     public LiveData<MovieResults> getPopularMovies(int page) {
         final MutableLiveData<MovieResults> data = new MutableLiveData<>();
-        client.getPopularMovies(page).enqueue(new MovieCallbackHandler<>(data));
+        client.getPopularMovies(page).enqueue(new MovieResultsCallbackHandler(data));
         return data;
     }
 
     public LiveData<MovieResults> getTopRatedMovies(int page) {
         final MutableLiveData<MovieResults> data = new MutableLiveData<>();
-        client.getTopRatedMovies(page).enqueue(new MovieCallbackHandler<>(data));
+        client.getTopRatedMovies(page).enqueue(new MovieResultsCallbackHandler(data));
         return data;
     }
 

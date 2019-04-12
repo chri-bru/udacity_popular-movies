@@ -1,6 +1,7 @@
 package android.chribru.dev.popularmovies.persistance.repositories.handlers;
 
 import android.chribru.dev.popularmovies.models.Movie;
+import android.chribru.dev.popularmovies.models.MovieResults;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,17 +14,17 @@ import retrofit2.Response;
 /**
  * Callback handler for handling async requests via Retrofit
  */
-public class MovieCallbackHandler implements Callback<Movie> {
+public class MovieResultsCallbackHandler implements Callback<MovieResults> {
 
     private final MutableLiveData data;
 
-    public MovieCallbackHandler(MutableLiveData<Movie> data) {
+    public MovieResultsCallbackHandler(MutableLiveData<MovieResults> data) {
         this.data = data;
 
     }
 
     @Override
-    public void onResponse(@NotNull Call<Movie> call, @NotNull Response<Movie> response) {
+    public void onResponse(@NotNull Call<MovieResults> call, @NotNull Response<MovieResults> response) {
         Log.i(this.getClass().getName(), "Request was successful!");
 
         if (response.isSuccessful()) {
@@ -32,8 +33,8 @@ public class MovieCallbackHandler implements Callback<Movie> {
     }
 
     @Override
-    public void onFailure(@NotNull Call<Movie> call, @NotNull Throwable t) {
+    public void onFailure(@NotNull Call<MovieResults> call, @NotNull Throwable t) {
         Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
-        data.setValue(new Movie());
+        data.setValue(new MovieResults());
     }
 }
