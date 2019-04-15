@@ -1,8 +1,8 @@
 package android.chribru.dev.popularmovies.utils;
 
 import android.chribru.dev.popularmovies.R;
-import android.chribru.dev.popularmovies.models.Genre;
-import android.chribru.dev.popularmovies.models.Movie;
+import android.chribru.dev.popularmovies.models.dto.GenreDto;
+import android.chribru.dev.popularmovies.models.dto.MovieDto;
 import android.content.Context;
 import android.text.TextUtils;
 import java.text.DateFormat;
@@ -14,25 +14,25 @@ import java.util.List;
 
 public class MovieDetailsUtils {
 
-    public static String transformRuntime(Movie movie, Context context) {
-        if (movie == null) {
+    public static String transformRuntime(MovieDto movieDto, Context context) {
+        if (movieDto == null) {
             return "";
         }
-        return context.getString(R.string.movie_runtime, movie.getRuntime().toString());
+        return context.getString(R.string.movie_runtime, movieDto.getRuntime().toString());
     }
 
-    public static String transformGenres(Movie movie) {
-        if (movie == null) {
+    public static String transformGenres(MovieDto movieDto) {
+        if (movieDto == null) {
             return "";
         }
-        return TextUtils.join(", ", getGenreNames(movie));
+        return TextUtils.join(", ", getGenreNames(movieDto));
     }
 
-    private static List<String> getGenreNames(Movie movie) {
+    private static List<String> getGenreNames(MovieDto movieDto) {
         List<String> list = new ArrayList<>();
 
-        for (Genre genre : movie.getGenres()) {
-            list.add(genre.getName());
+        for (GenreDto genreDto : movieDto.getGenreDtos()) {
+            list.add(genreDto.getName());
         }
 
         return list;

@@ -1,6 +1,6 @@
 package android.chribru.dev.popularmovies.persistance;
 
-import android.chribru.dev.popularmovies.models.Movie;
+import android.chribru.dev.popularmovies.models.dto.MovieDto;
 
 import java.util.List;
 
@@ -15,14 +15,14 @@ import androidx.room.Query;
 public interface MovieDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    void insert(Movie movie);
+    void insert(MovieDto movieDto);
 
     @Delete
-    void delete(Movie movie);
+    void delete(MovieDto movieDto);
 
-    @Query("SELECT * FROM movie_table WHERE id == :movieId")
-    LiveData<Movie> getMovie(int movieId);
+    @Query("SELECT * FROM MovieDto WHERE id == :movieId")
+    LiveData<MovieDto> getMovie(int movieId);
 
-    @Query("SELECT * FROM movie_table ORDER BY title ASC")
-    LiveData<List<Movie>> getAllMovies();
+    @Query("SELECT * FROM MovieDto ORDER BY title ASC")
+    LiveData<List<MovieDto>> getAllMovies();
 }

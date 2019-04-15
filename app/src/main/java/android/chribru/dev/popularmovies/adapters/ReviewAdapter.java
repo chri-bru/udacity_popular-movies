@@ -2,19 +2,20 @@ package android.chribru.dev.popularmovies.adapters;
 
 import android.chribru.dev.popularmovies.R;
 import android.chribru.dev.popularmovies.models.Review;
-import android.chribru.dev.popularmovies.models.ReviewResults;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewCellViewHolder> {
 
-    private ReviewResults results;
+    private List<Review> reviews;
     private final Context context;
 
     public ReviewAdapter(Context context) {
@@ -31,21 +32,18 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewCell
 
     @Override
     public void onBindViewHolder(@NonNull ReviewCellViewHolder holder, int position) {
-        Review review = results.getResults().get(position);
+        Review review = this.reviews.get(position);
         holder.reviewText.setText(review.getContent());
         holder.author.setText(review.getAuthor());
     }
 
     @Override
     public int getItemCount() {
-        if (results == null) {
-            return 0;
-        }
-        return results.getResults() == null ? 0 : results.getResults().size();
+        return this.reviews == null ? 0 : this.reviews.size();
     }
 
-    public void setResults(ReviewResults results) {
-        this.results = results;
+    public void setResults(List<Review> results) {
+        this.reviews = results;
         notifyDataSetChanged();
     }
 
@@ -62,6 +60,7 @@ public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewCell
 
         @Override
         public void onClick(View v) {
+            // don't do anything for now
         }
     }
 }

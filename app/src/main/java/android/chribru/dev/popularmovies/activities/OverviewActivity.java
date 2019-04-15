@@ -4,8 +4,8 @@ import android.chribru.dev.popularmovies.adapters.OverviewAdapter;
 import android.chribru.dev.popularmovies.data.Constants;
 import android.chribru.dev.popularmovies.databinding.ActivityOverviewBinding;
 import android.chribru.dev.popularmovies.interfaces.OverviewAdapterOnClickHandler;
-import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.models.MovieResults;
+import android.chribru.dev.popularmovies.models.dto.MovieDto;
+import android.chribru.dev.popularmovies.models.dto.MovieResultsDto;
 import android.chribru.dev.popularmovies.viewmodels.MoviesViewModel;
 import android.content.Intent;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OverviewActivity extends AppCompatActivity implements OverviewAdapterOnClickHandler {
 
-    private MovieResults movieResults;
+    private MovieResultsDto movieResultsDto;
     private int activityLabelId;
     private MoviesViewModel viewModel;
     private OverviewAdapter adapter;
@@ -53,15 +53,15 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(Constants.RESULTS_PARCELABLE, movieResults);
+        outState.putParcelable(Constants.RESULTS_PARCELABLE, movieResultsDto);
         outState.putInt(Constants.ACTIVITY_LABEL, activityLabelId);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        MovieResults savedMovieResults = savedInstanceState.getParcelable(Constants.RESULTS_PARCELABLE);
-        setMovieResults(savedMovieResults);
+        MovieResultsDto savedMovieResultsDto = savedInstanceState.getParcelable(Constants.RESULTS_PARCELABLE);
+        setMovieResultsDto(savedMovieResultsDto);
         setActivityLabel(savedInstanceState.getInt(Constants.ACTIVITY_LABEL));
     }
 
@@ -99,21 +99,21 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
 
     private void getPopularMovies(int page) {
         viewModel.getPopularMovies(page).observe(this, results -> {
-            setMovieResults(results);
+            setMovieResultsDto(results);
             setActivityLabel(R.string.overview_title_popular);
         });
     }
 
     private void getTopRatedMovies(int page) {
         viewModel.getTopRatedMoviews(page).observe(this, results -> {
-            setMovieResults(results);
+            setMovieResultsDto(results);
             setActivityLabel(R.string.overview_title_top_rated);
         });
     }
 
     private void getFavorites() {
         viewModel.getFavorites().observe(this, results -> {
-            setMovieResults(results);
+            setMovieResultsDto(results);
             setActivityLabel(R.string.favorites);
         });
     }
@@ -133,9 +133,9 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     }
 
     @Override
-    public void onClick(Movie movie) {
+    public void onClick(MovieDto movieDto) {
         Intent intent = new Intent(this, MovieDetailActivity.class);
-        intent.putExtra(Constants.MOVIE_ID_PARCELABLE, movie.getId());
+        intent.putExtra(Constants.MOVIE_ID_PARCELABLE, movieDto.getId());
         startActivity(intent);
     }
 
@@ -144,15 +144,15 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         binding.overviewToolbar.setTitle(getString(activityLabelId));
     }
 
-    private void setMovieResults(MovieResults movieResults) {
-        if (movieResults == null || movieResults.getMovies().size() == 0) {
+    private void setMovieResultsDto(MovieResultsDto movieResultsDto) {
+        if (movieResultsDto == null || movieResultsDto.getMovieDtos().size() == 0) {
             displayErrorMessage();
             return;
         }
 
         setVisibilityOfOverview(true);
-        adapter.setMovieResults(null);
-        this.movieResults = movieResults;
-        adapter.setMovieResults(movieResults);
+        adapter.setMovieResultsDto(null);
+        this.movieResultsDto = movieResultsDto;
+        adapter.setMovieResultsDto(movieResultsDto);
     }
 }

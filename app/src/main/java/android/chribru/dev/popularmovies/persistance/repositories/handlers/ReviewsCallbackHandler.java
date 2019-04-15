@@ -1,6 +1,6 @@
 package android.chribru.dev.popularmovies.persistance.repositories.handlers;
 
-import android.chribru.dev.popularmovies.models.ReviewResults;
+import android.chribru.dev.popularmovies.models.dto.ReviewResultsDto;
 import android.util.Log;
 
 import org.jetbrains.annotations.NotNull;
@@ -13,16 +13,16 @@ import retrofit2.Response;
 /**
  * Callback handler for handling async requests via Retrofit for reviews
  */
-public class ReviewsCallbackHandler implements Callback<ReviewResults> {
+public class ReviewsCallbackHandler implements Callback<ReviewResultsDto> {
 
-    private final MutableLiveData<ReviewResults> data;
+    private final MutableLiveData<ReviewResultsDto> data;
 
-    public ReviewsCallbackHandler(MutableLiveData<ReviewResults> data) {
+    public ReviewsCallbackHandler(MutableLiveData<ReviewResultsDto> data) {
         this.data = data;
     }
 
     @Override
-    public void onResponse(@NotNull Call<ReviewResults> call, @NotNull Response<ReviewResults> response) {
+    public void onResponse(@NotNull Call<ReviewResultsDto> call, @NotNull Response<ReviewResultsDto> response) {
         Log.i(this.getClass().getName(), "Request was successful!");
 
         if (response.isSuccessful()) {
@@ -31,8 +31,8 @@ public class ReviewsCallbackHandler implements Callback<ReviewResults> {
     }
 
     @Override
-    public void onFailure(@NotNull Call<ReviewResults> call, @NotNull Throwable t) {
+    public void onFailure(@NotNull Call<ReviewResultsDto> call, @NotNull Throwable t) {
         Log.e(this.getClass().getName(), String.format("Request failed: %s", t.getLocalizedMessage()));
-        data.setValue(new ReviewResults());
+        data.setValue(new ReviewResultsDto());
     }
 }

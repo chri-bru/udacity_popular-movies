@@ -1,14 +1,15 @@
-package android.chribru.dev.popularmovies.models;
+package android.chribru.dev.popularmovies.models.dto;
 
 import java.io.Serializable;
 import java.util.List;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class ReviewResults implements Serializable, Parcelable
+public class ReviewResultsDto implements Serializable, Parcelable
 {
 
     @SerializedName("id")
@@ -19,40 +20,40 @@ public class ReviewResults implements Serializable, Parcelable
     private Integer page;
     @SerializedName("results")
     @Expose
-    private List<Review> results = null;
+    private List<ReviewDto> results = null;
     @SerializedName("total_pages")
     @Expose
     private Integer totalPages;
     @SerializedName("total_results")
     @Expose
     private Integer totalResults;
-    public final static Parcelable.Creator<ReviewResults> CREATOR = new Creator<ReviewResults>() {
+    public final static Parcelable.Creator<ReviewResultsDto> CREATOR = new Creator<ReviewResultsDto>() {
 
 
         @SuppressWarnings({
                 "unchecked"
         })
-        public ReviewResults createFromParcel(Parcel in) {
-            return new ReviewResults(in);
+        public ReviewResultsDto createFromParcel(Parcel in) {
+            return new ReviewResultsDto(in);
         }
 
-        public ReviewResults[] newArray(int size) {
-            return (new ReviewResults[size]);
+        public ReviewResultsDto[] newArray(int size) {
+            return (new ReviewResultsDto[size]);
         }
 
     }
             ;
     private final static long serialVersionUID = 8409079821272233166L;
 
-    protected ReviewResults(Parcel in) {
+    protected ReviewResultsDto(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.page = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        in.readList(this.results, (Review.class.getClassLoader()));
+        in.readList(this.results, (ReviewDto.class.getClassLoader()));
         this.totalPages = ((Integer) in.readValue((Integer.class.getClassLoader())));
         this.totalResults = ((Integer) in.readValue((Integer.class.getClassLoader())));
     }
 
-    public ReviewResults() {
+    public ReviewResultsDto() {
     }
 
     public Integer getId() {
@@ -71,11 +72,11 @@ public class ReviewResults implements Serializable, Parcelable
         this.page = page;
     }
 
-    public List<Review> getResults() {
+    public List<ReviewDto> getResults() {
         return results;
     }
 
-    public void setResults(List<Review> results) {
+    public void setResults(List<ReviewDto> results) {
         this.results = results;
     }
 

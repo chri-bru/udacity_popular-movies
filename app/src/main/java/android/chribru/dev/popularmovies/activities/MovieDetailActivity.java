@@ -6,8 +6,8 @@ import android.chribru.dev.popularmovies.adapters.VideoAdapter;
 import android.chribru.dev.popularmovies.data.Constants;
 import android.chribru.dev.popularmovies.databinding.ActivityMovieDetailBinding;
 import android.chribru.dev.popularmovies.interfaces.VideoOnClickHandler;
-import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.models.Video;
+import android.chribru.dev.popularmovies.models.dto.MovieDto;
+import android.chribru.dev.popularmovies.models.dto.VideoDto;
 import android.chribru.dev.popularmovies.viewmodels.MovieDetailViewModel;
 import android.content.Intent;
 import android.os.Bundle;
@@ -28,7 +28,7 @@ import androidx.recyclerview.widget.RecyclerView;
 public class MovieDetailActivity extends AppCompatActivity implements VideoOnClickHandler {
 
     private MovieDetailViewModel viewModel;
-    private Movie movie;
+    private MovieDto movieDto;
 
     private ActivityMovieDetailBinding binding;
     private ReviewAdapter reviewAdapter;
@@ -83,13 +83,13 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(Constants.MOVIE_PARCELABLE, movie);
+        outState.putParcelable(Constants.MOVIE_PARCELABLE, movieDto);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        movie = savedInstanceState.getParcelable(Constants.MOVIE_PARCELABLE);
+        movieDto = savedInstanceState.getParcelable(Constants.MOVIE_PARCELABLE);
     }
 
     @Override
@@ -120,9 +120,9 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
 
     private void getMovieDetails(int id) {
         viewModel.getMovieDetails(id).observe(this, movie1 -> {
-                movie = movie1;
+                movieDto = movie1;
                 populateUi();
-                binding.setMovie(movie);
+                binding.setMovie(movieDto);
             }
         );
     }
@@ -141,15 +141,15 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     }
 
     private void addToFavorites() {
-        viewModel.addToFavorites(movie);
+        viewModel.addToFavorites(movieDto);
     }
 
     private void removeFromFavorites() {
-        viewModel.removeFromFavorites(movie);
+        viewModel.removeFromFavorites(movieDto);
     }
 
     private void populateUi() {
-        if (movie == null) {
+        if (movieDto == null) {
             displayErrorMessage();
             return;
         }
@@ -162,7 +162,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
             return;
         }
         MenuItem item = currentMenu.getItem(0);
-        if (movie.getFavorited()) {
+        if (movieDto.getFavorited()) {
             setFavoriteIconToChecked(item);
         }
     }
@@ -205,7 +205,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
 
     // on click for videos
     @Override
-    public void onClick(Video video) {
-        Snackbar.make(binding.movieScrollview, video.getName(), Snackbar.LENGTH_LONG);
+    public void onClick(VideoDto videoDto) {
+        Snackbar.make(binding.movieScrollview, videoDto.getName(), Snackbar.LENGTH_LONG);
     }
 }

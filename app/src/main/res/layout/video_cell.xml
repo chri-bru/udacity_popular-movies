@@ -20,6 +20,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        tools:text="I'm a video!"/>
+        tools:text="I'm a videoDto!"/>
 
 </LinearLayout>

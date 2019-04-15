@@ -1,14 +1,15 @@
-package android.chribru.dev.popularmovies.models;
+package android.chribru.dev.popularmovies.models.dto;
 
 import java.io.Serializable;
 import java.util.List;
+
 import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class VideoResults implements Serializable, Parcelable
+public class VideoResultsDto implements Serializable, Parcelable
 {
 
     @SerializedName("id")
@@ -16,30 +17,30 @@ public class VideoResults implements Serializable, Parcelable
     private Integer id;
     @SerializedName("results")
     @Expose
-    private List<Video> results = null;
-    public final static Parcelable.Creator<VideoResults> CREATOR = new Creator<VideoResults>() {
+    private List<VideoDto> results = null;
+    public final static Parcelable.Creator<VideoResultsDto> CREATOR = new Creator<VideoResultsDto>() {
 
 
     @SuppressWarnings({
             "unchecked"
     })
-    public VideoResults createFromParcel(Parcel in) {
-        return new VideoResults(in);
+    public VideoResultsDto createFromParcel(Parcel in) {
+        return new VideoResultsDto(in);
     }
 
-    public VideoResults[] newArray(int size) {
-            return (new VideoResults[size]);
+    public VideoResultsDto[] newArray(int size) {
+            return (new VideoResultsDto[size]);
         }
     };
 
     private final static long serialVersionUID = 7972801271982786517L;
 
-    protected VideoResults(Parcel in) {
+    protected VideoResultsDto(Parcel in) {
         this.id = ((Integer) in.readValue((Integer.class.getClassLoader())));
-        in.readList(this.results, (android.chribru.dev.popularmovies.models.VideoResults.class.getClassLoader()));
+        in.readList(this.results, (VideoResultsDto.class.getClassLoader()));
     }
 
-    public VideoResults() {
+    public VideoResultsDto() {
     }
 
     public Integer getId() {
@@ -50,11 +51,11 @@ public class VideoResults implements Serializable, Parcelable
         this.id = id;
     }
 
-    public List<Video> getResults() {
+    public List<VideoDto> getResults() {
         return results;
     }
 
-    public void setResults(List<Video> results) {
+    public void setResults(List<VideoDto> results) {
         this.results = results;
     }
 

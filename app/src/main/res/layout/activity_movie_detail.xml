@@ -7,8 +7,8 @@
         <import type="android.chribru.dev.popularmovies.utils.MovieDetailsUtils" />
         <import type="android.chribru.dev.popularmovies.utils.TheMoviePathResolver" />
         <variable
-            name="movie"
-            type="android.chribru.dev.popularmovies.models.Movie" />
+            name="movieDto"
+            type="android.chribru.dev.popularmovies.models.dto.MovieDto" />
     </data>
 
 
@@ -49,7 +49,7 @@
                     android:padding="0dp"
                     android:scaleType="matrix"
                     app:size="@{TheMoviePathResolver.SIZE_W500}"
-                    app:url="@{movie.getBackdropPath()}" />
+                    app:url="@{movieDto.getBackdropPath()}" />
 
             </FrameLayout>
 
@@ -63,7 +63,7 @@
                 app:layout_constraintStart_toStartOf="@+id/detail_header"
                 app:layout_constraintTop_toBottomOf="@+id/detail_header"
                 app:size="@{TheMoviePathResolver.SIZE_W185}"
-                app:url="@{movie.getPosterPath()}" />
+                app:url="@{movieDto.getPosterPath()}" />
 
             <TextView
                 android:id="@+id/detail_length"
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="@{MovieDetailsUtils.transformRuntime(movie, context)}"
+                android:text="@{MovieDetailsUtils.transformRuntime(movieDto, context)}"
                 app:layout_constraintStart_toEndOf="@+id/detail_poster_img"
                 app:layout_constraintTop_toBottomOf="@+id/detail_header"
                 tools:text="200min" />
@@ -81,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:text="@{MovieDetailsUtils.transformDate(movie.getReleaseDate())}"
+                android:text="@{MovieDetailsUtils.transformDate(movieDto.getReleaseDate())}"
                 android:textColor="@color/colorGray"
                 app:layout_constraintEnd_toEndOf="@+id/detail_user_rating"
                 app:layout_constraintTop_toBottomOf="@+id/detail_header"
@@ -94,13 +94,13 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="24dp"
                 android:maxLines="2"
-                android:text="@{movie.getTitle()}"
+                android:text="@{movieDto.getTitle()}"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toStartOf="@+id/detail_user_rating"
                 app:layout_constraintStart_toStartOf="@+id/detail_length"
                 app:layout_constraintTop_toBottomOf="@+id/detail_release_date"
-                tools:text="The movie" />
+                tools:text="The movieDto" />
 
             <TextView
                 android:id="@+id/detail_genres"
@@ -108,7 +108,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="@{MovieDetailsUtils.transformGenres(movie)}"
+                android:text="@{MovieDetailsUtils.transformGenres(movieDto)}"
                 app:layout_constraintEnd_toStartOf="@+id/detail_user_rating"
                 app:layout_constraintStart_toStartOf="@+id/detail_title"
                 app:layout_constraintTop_toBottomOf="@+id/detail_title"
@@ -121,7 +121,7 @@
                 android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:background="@drawable/circle"
-                android:text="@{movie.getVoteAverage().toString()}"
+                android:text="@{movieDto.getVoteAverage().toString()}"
                 android:textColor="@color/colorWhite"
                 android:textSize="16sp"
                 android:visibility="invisible"
@@ -138,7 +138,7 @@
                 android:layout_marginEnd="16dp"
                 android:paddingLeft="8dp"
                 android:paddingRight="8dp"
-                android:text="@{movie.getOverview()}"
+                android:text="@{movieDto.getOverview()}"
                 app:layout_constraintEnd_toEndOf="@+id/detail_user_rating"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_poster_img"

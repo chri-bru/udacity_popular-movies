@@ -1,13 +1,13 @@
 package android.chribru.dev.popularmovies.persistance;
 
-import android.chribru.dev.popularmovies.models.Movie;
+import android.chribru.dev.popularmovies.models.dto.MovieDto;
 import android.content.Context;
 
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
-@Database(entities = {Movie.class}, version = 1, exportSchema = false)
+@Database(entities = {MovieDto.class}, version = 1, exportSchema = false)
 public abstract class MovieRoomDatabase extends RoomDatabase {
 
     private static volatile MovieRoomDatabase INSTANCE;

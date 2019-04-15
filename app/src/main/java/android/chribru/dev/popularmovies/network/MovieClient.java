@@ -2,10 +2,10 @@ package android.chribru.dev.popularmovies.network;
 
 import android.chribru.dev.popularmovies.api.TheMovieDbMovieApi;
 import android.chribru.dev.popularmovies.data.Constants;
-import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.models.MovieResults;
-import android.chribru.dev.popularmovies.models.ReviewResults;
-import android.chribru.dev.popularmovies.models.VideoResults;
+import android.chribru.dev.popularmovies.models.dto.MovieDto;
+import android.chribru.dev.popularmovies.models.dto.MovieResultsDto;
+import android.chribru.dev.popularmovies.models.dto.ReviewResultsDto;
+import android.chribru.dev.popularmovies.models.dto.VideoResultsDto;
 
 import retrofit2.Call;
 
@@ -21,7 +21,7 @@ public class MovieClient {
      * A single page holds 20 movies.
      * @param page the page of the results
      */
-    public Call<MovieResults> getPopularMovies(int page) {
+    public Call<MovieResultsDto> getPopularMovies(int page) {
         return movieApi.popularMovieList(page);
     }
 
@@ -30,7 +30,7 @@ public class MovieClient {
      * A single page holds 20 movies.
      * @param page the page of the results
      */
-    public Call<MovieResults> getTopRatedMovies(int page) {
+    public Call<MovieResultsDto> getTopRatedMovies(int page) {
         return movieApi.topRatedMovieList(page);
     }
 
@@ -38,7 +38,7 @@ public class MovieClient {
      * Returns all known details of the movie.
      * @param id the id of the movie
      */
-    public Call<Movie> getMovieDetails(int id) {
+    public Call<MovieDto> getMovieDetails(int id) {
         return movieApi.movieDetails(id);
     }
 
@@ -47,7 +47,7 @@ public class MovieClient {
      * @param id the id of the movie
      * @param language the language of the requested videos
      */
-    public Call<VideoResults> getVideosForMovie(int id, String language) {
+    public Call<VideoResultsDto> getVideosForMovie(int id, String language) {
         return movieApi.videos(id, language);
     }
 
@@ -56,7 +56,7 @@ public class MovieClient {
      * @param id the id of the movie
      * @param page the page of the results
      */
-    public Call<ReviewResults> getReviewsForMovie(int id, int page) {
+    public Call<ReviewResultsDto> getReviewsForMovie(int id, int page) {
         return movieApi.reviews(id, page);
     }
 }

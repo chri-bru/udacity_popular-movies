@@ -1,10 +1,10 @@
 package android.chribru.dev.popularmovies.persistance.repositories;
 
 import android.app.Application;
-import android.chribru.dev.popularmovies.models.Movie;
-import android.chribru.dev.popularmovies.models.MovieResults;
-import android.chribru.dev.popularmovies.models.ReviewResults;
-import android.chribru.dev.popularmovies.models.VideoResults;
+import android.chribru.dev.popularmovies.models.dto.MovieDto;
+import android.chribru.dev.popularmovies.models.dto.MovieResultsDto;
+import android.chribru.dev.popularmovies.models.dto.ReviewResultsDto;
+import android.chribru.dev.popularmovies.models.dto.VideoResultsDto;
 import android.chribru.dev.popularmovies.network.MovieClient;
 import android.chribru.dev.popularmovies.persistance.MovieDao;
 import android.chribru.dev.popularmovies.persistance.MovieRoomDatabase;
@@ -32,10 +32,10 @@ public class MovieRepository {
         movieDao = db.movieDao();
     }
 
-    public LiveData<Movie> getMovieDetails(int id) {
-        final MutableLiveData<Movie> data = new MutableLiveData<>();
+    public LiveData<MovieDto> getMovieDetails(int id) {
+        final MutableLiveData<MovieDto> data = new MutableLiveData<>();
 
-        LiveData<Movie> movie = movieDao.getMovie(id);
+        LiveData<MovieDto> movie = movieDao.getMovie(id);
         movie.observeForever(movie1 -> {
             if (movie1 == null) {
                 client.getMovieDetails(id).enqueue(new MovieCallbackHandler(data));
@@ -53,46 +53,46 @@ public class MovieRepository {
                 });
     }
 
-    public LiveData<MovieResults> getPopularMovies(int page) {
-        final MutableLiveData<MovieResults> data = new MutableLiveData<>();
+    public LiveData<MovieResultsDto> getPopularMovies(int page) {
+        final MutableLiveData<MovieResultsDto> data = new MutableLiveData<>();
         client.getPopularMovies(page).enqueue(new MovieResultsCallbackHandler(data));
         return data;
     }
 
-    public LiveData<MovieResults> getTopRatedMovies(int page) {
-        final MutableLiveData<MovieResults> data = new MutableLiveData<>();
+    public LiveData<MovieResultsDto> getTopRatedMovies(int page) {
+        final MutableLiveData<MovieResultsDto> data = new MutableLiveData<>();
         client.getTopRatedMovies(page).enqueue(new MovieResultsCallbackHandler(data));
         return data;
     }
 
-    public LiveData<VideoResults> getVideosForMovie(int id, String language) {
-        final MutableLiveData<VideoResults> data = new MutableLiveData<>();
+    public LiveData<VideoResultsDto> getVideosForMovie(int id, String language) {
+        final MutableLiveData<VideoResultsDto> data = new MutableLiveData<>();
         client.getVideosForMovie(id, language).enqueue(new VideosCallbackHandler(data));
         return data;
     }
 
-    public LiveData<ReviewResults> getReviewsForMovie(int id, int page) {
-        final MutableLiveData<ReviewResults> data = new MutableLiveData<>();
+    public LiveData<ReviewResultsDto> getReviewsForMovie(int id, int page) {
+        final MutableLiveData<ReviewResultsDto> data = new MutableLiveData<>();
         client.getReviewsForMovie(id, page).enqueue(new ReviewsCallbackHandler(data));
         return data;
     }
 
     // Favorites
-    public LiveData<List<Movie>> getFavorites() {
+    public LiveData<List<MovieDto>> getFavorites() {
         return movieDao.getAllMovies();
     }
 
-    public void insertToFavorites(Movie movie) {
-        movie.setFavorited(true);
-        new InsertAsyncTask(movieDao).execute(movie);
+    public void insertToFavorites(MovieDto movieDto) {
+        movieDto.setFavorited(true);
+        new InsertAsyncTask(movieDao).execute(movieDto);
     }
 
-    private void insertMovie(Movie movie) {
-        movie.setFavorited(false);
-        new InsertAsyncTask(movieDao).execute(movie);
+    private void insertMovie(MovieDto movieDto) {
+        movieDto.setFavorited(false);
+        new InsertAsyncTask(movieDao).execute(movieDto);
     }
 
-    private class InsertAsyncTask extends AsyncTask<Movie, Void, Void> {
+    private class InsertAsyncTask extends AsyncTask<MovieDto, Void, Void> {
         private MovieDao movieDao;
 
         InsertAsyncTask(MovieDao dao) {
@@ -100,17 +100,17 @@ public class MovieRepository {
         }
 
         @Override
-        protected Void doInBackground(Movie... movies) {
-            movieDao.insert(movies[0]);
+        protected Void doInBackground(MovieDto... movieDtos) {
+            movieDao.insert(movieDtos[0]);
             return null;
         }
     }
 
-    public void deleteFromFavorites(Movie movie) {
-        new DeleteAsysncTask(movieDao).execute(movie);
+    public void deleteFromFavorites(MovieDto movieDto) {
+        new DeleteAsysncTask(movieDao).execute(movieDto);
     }
 
-    private class DeleteAsysncTask extends AsyncTask<Movie, Void, Void> {
+    private class DeleteAsysncTask extends AsyncTask<MovieDto, Void, Void> {
         private MovieDao movieDao;
 
         DeleteAsysncTask(MovieDao dao) {
@@ -118,8 +118,8 @@ public class MovieRepository {
         }
 
         @Override
-        protected Void doInBackground(Movie... movies) {
-            movieDao.delete(movies[0]);
+        protected Void doInBackground(MovieDto... movieDtos) {
+            movieDao.delete(movieDtos[0]);
             return null;
         }
     }

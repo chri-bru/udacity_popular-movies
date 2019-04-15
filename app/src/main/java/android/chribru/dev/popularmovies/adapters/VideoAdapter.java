@@ -3,7 +3,6 @@ package android.chribru.dev.popularmovies.adapters;
 import android.chribru.dev.popularmovies.R;
 import android.chribru.dev.popularmovies.interfaces.VideoOnClickHandler;
 import android.chribru.dev.popularmovies.models.Video;
-import android.chribru.dev.popularmovies.models.VideoResults;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -59,8 +57,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoCellVie
         }
     }
 
-    private VideoResults results;
-    private Map<VideoType, List<Video>> countPerType = new HashMap<>();
+    private List<Video> videos;
+    private Map<VideoType, List<Video>> countPerTypeMapping = new HashMap<>();
 
     private final VideoOnClickHandler onClickHandler;
     private final Context context;
@@ -80,34 +78,31 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoCellVie
 
     @Override
     public void onBindViewHolder(@NonNull VideoCellViewHolder holder, int position) {
-        Video video = results.getResults().get(position);
+        Video video = this.videos.get(position);
 
         VideoType type = VideoType.getType(video.getType());
-        int count =  countPerType.get(type).indexOf(video);
+        int count =  this.countPerTypeMapping.get(type).indexOf(video);
         holder.title.setText(video.getType() + " " + count);
     }
 
     @Override
     public int getItemCount() {
-        if (results == null) {
-            return 0;
-        }
-        return results.getResults() == null ? 0 : results.getResults().size();
+        return this.videos == null ? 0 : this.videos.size();
     }
 
-    public void setResults(VideoResults results) {
-        this.results = results;
+    public void setResults(List<Video> results) {
+        this.videos = results;
 
-        for (Video vid : results.getResults()) {
-            List<Video> videos;
+        for (Video vid : this.videos) {
+            List<Video> tempVideos;
             VideoType type = VideoType.getType(vid.getType());
-            if (countPerType != null && countPerType.containsKey(type)) {
-                videos = countPerType.get(type);
+            if (this.countPerTypeMapping != null && this.countPerTypeMapping.containsKey(type)) {
+                tempVideos = this.countPerTypeMapping.get(type);
             } else {
-                videos = new ArrayList<>();
+                tempVideos = new ArrayList<>();
             }
-            videos.add(vid);
-            countPerType.put(type, videos);
+            tempVideos.add(vid);
+            this.countPerTypeMapping.put(type, tempVideos);
         }
 
         notifyDataSetChanged();
@@ -124,7 +119,7 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoCellVie
 
         @Override
         public void onClick(View v) {
-            Video video = results.getResults().get(getAdapterPosition());
+            Video video = videos.get(getAdapterPosition());
             onClickHandler.onClick(video);
         }
     }
