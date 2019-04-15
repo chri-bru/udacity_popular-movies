@@ -22,7 +22,7 @@ public class Constants {
     /*
      * Constant for putting a results extra
      */
-    public static final String RESULTS_PARCELABLE = "RESULTS";
+    public static final String SORT_ORDER_PARCELABLE = "SORT_ORDER";
 
     /*
      * Constant for putting a results extra

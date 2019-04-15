@@ -19,19 +19,17 @@ public class MovieClient {
     /**
      * Returns the list of popular movies.
      * A single page holds 20 movies.
-     * @param page the page of the results
      */
-    public Call<MovieResults> getPopularMovies(int page) {
-        return movieApi.popularMovieList(page);
+    public Call<MovieResults> getPopularMovies() {
+        return movieApi.popularMovieList();
     }
 
     /**
      * Returns the list of top rated movies.
      * A single page holds 20 movies.
-     * @param page the page of the results
      */
-    public Call<MovieResults> getTopRatedMovies(int page) {
-        return movieApi.topRatedMovieList(page);
+    public Call<MovieResults> getTopRatedMovies() {
+        return movieApi.topRatedMovieList();
     }
 
     /**

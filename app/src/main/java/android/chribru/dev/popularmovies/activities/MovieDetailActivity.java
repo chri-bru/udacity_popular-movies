@@ -83,13 +83,14 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(Constants.MOVIE_PARCELABLE, movie);
+        outState.putInt(Constants.MOVIE_PARCELABLE, movie.getId());
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        movie = savedInstanceState.getParcelable(Constants.MOVIE_PARCELABLE);
+        int id = savedInstanceState.getInt(Constants.MOVIE_PARCELABLE);
+        getMovieDetails(id);
     }
 
     @Override
@@ -162,7 +163,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
             return;
         }
         MenuItem item = currentMenu.getItem(0);
-        if (movie.getFavorited()) {
+        if (movie.getUserFavorite()) {
             setFavoriteIconToChecked(item);
         }
     }

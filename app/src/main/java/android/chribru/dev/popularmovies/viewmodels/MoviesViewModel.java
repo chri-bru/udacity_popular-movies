@@ -21,12 +21,12 @@ public class MoviesViewModel extends AndroidViewModel {
         this.repository = new MovieRepository(application);
     }
 
-    public LiveData<MovieResults> getPopularMovies(int page) {
-        return repository.getPopularMovies(page);
+    public LiveData<MovieResults> getPopularMovies() {
+        return repository.getPopularMovies();
     }
 
-    public LiveData<MovieResults> getTopRatedMoviews(int page) {
-        return repository.getTopRatedMovies(page);
+    public LiveData<MovieResults> getTopRatedMoviews() {
+        return repository.getTopRatedMovies();
     }
 
     public LiveData<MovieResults> getFavorites() {

@@ -22,11 +22,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class OverviewActivity extends AppCompatActivity implements OverviewAdapterOnClickHandler {
 
-    private MovieResults movieResults;
     private int activityLabelId;
     private MoviesViewModel viewModel;
     private OverviewAdapter adapter;
     private ActivityOverviewBinding binding;
+    private Sorting sortOrder;
+
+    public enum Sorting {
+        MostPopular,
+        TopRated,
+        Favorites
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,20 +59,41 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelable(Constants.RESULTS_PARCELABLE, movieResults);
+        if (sortOrder == null) {
+            sortOrder = Sorting.TopRated;
+        }
+        outState.putString(Constants.SORT_ORDER_PARCELABLE, sortOrder.name());
         outState.putInt(Constants.ACTIVITY_LABEL, activityLabelId);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
-        MovieResults savedMovieResults = savedInstanceState.getParcelable(Constants.RESULTS_PARCELABLE);
-        setMovieResults(savedMovieResults);
+        sortOrder = Sorting.valueOf(savedInstanceState.getString(Constants.SORT_ORDER_PARCELABLE));
         setActivityLabel(savedInstanceState.getInt(Constants.ACTIVITY_LABEL));
+
+        populateUi(sortOrder);
     }
 
     private void populateUi() {
-        getPopularMovies(1);
+        populateUi(Sorting.MostPopular);
+    }
+
+    private void populateUi(Sorting order) {
+        switch (order) {
+            case MostPopular:
+                getPopularMovies();
+                break;
+            case TopRated:
+                getTopRatedMovies();
+                break;
+            case Favorites:
+                getFavorites();
+                break;
+            default:
+                getPopularMovies();
+
+        }
     }
 
     @Override
@@ -80,12 +107,12 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         int selectedItem = item.getItemId();
 
         if (selectedItem == R.id.menu_sorting_popular) {
-            getPopularMovies(1);
+            getPopularMovies();
             return true;
         }
 
         if (selectedItem == R.id.menu_sorting_top_rated) {
-            getTopRatedMovies(1);
+            getTopRatedMovies();
             return true;
         }
 
@@ -97,15 +124,15 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
         return super.onOptionsItemSelected(item);
     }
 
-    private void getPopularMovies(int page) {
-        viewModel.getPopularMovies(page).observe(this, results -> {
+    private void getPopularMovies() {
+        viewModel.getPopularMovies().observe(this, results -> {
             setMovieResults(results);
             setActivityLabel(R.string.overview_title_popular);
         });
     }
 
-    private void getTopRatedMovies(int page) {
-        viewModel.getTopRatedMoviews(page).observe(this, results -> {
+    private void getTopRatedMovies() {
+        viewModel.getTopRatedMoviews().observe(this, results -> {
             setMovieResults(results);
             setActivityLabel(R.string.overview_title_top_rated);
         });
@@ -152,7 +179,6 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
 
         setVisibilityOfOverview(true);
         adapter.setMovieResults(null);
-        this.movieResults = movieResults;
         adapter.setMovieResults(movieResults);
     }
 }

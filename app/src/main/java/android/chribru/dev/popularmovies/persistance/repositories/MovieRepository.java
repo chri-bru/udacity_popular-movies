@@ -46,22 +46,22 @@ public class MovieRepository {
 
         // favorited movies are already persisted
         return Transformations.map(data, input -> {
-                    if (input != null && !input.getFavorited()) {
+                    if (input != null && !input.getUserFavorite()) {
                         insertMovie(input);
                     }
                     return input;
                 });
     }
 
-    public LiveData<MovieResults> getPopularMovies(int page) {
+    public LiveData<MovieResults> getPopularMovies() {
         final MutableLiveData<MovieResults> data = new MutableLiveData<>();
-        client.getPopularMovies(page).enqueue(new MovieResultsCallbackHandler(data));
+        client.getPopularMovies().enqueue(new MovieResultsCallbackHandler(data));
         return data;
     }
 
-    public LiveData<MovieResults> getTopRatedMovies(int page) {
+    public LiveData<MovieResults> getTopRatedMovies() {
         final MutableLiveData<MovieResults> data = new MutableLiveData<>();
-        client.getTopRatedMovies(page).enqueue(new MovieResultsCallbackHandler(data));
+        client.getTopRatedMovies().enqueue(new MovieResultsCallbackHandler(data));
         return data;
     }
 
@@ -83,12 +83,12 @@ public class MovieRepository {
     }
 
     public void insertToFavorites(Movie movie) {
-        movie.setFavorited(true);
+        movie.setUserFavorite(true);
         new InsertAsyncTask(movieDao).execute(movie);
     }
 
     private void insertMovie(Movie movie) {
-        movie.setFavorited(false);
+        movie.setUserFavorite(false);
         new InsertAsyncTask(movieDao).execute(movie);
     }
 

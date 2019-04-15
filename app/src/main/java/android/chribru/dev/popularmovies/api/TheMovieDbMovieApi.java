@@ -13,10 +13,10 @@ import retrofit2.http.Query;
 public interface TheMovieDbMovieApi {
 
     @GET("/3/movie/popular")
-    Call<MovieResults> popularMovieList(@Query("page") int page);
+    Call<MovieResults> popularMovieList();
 
     @GET("/3/movie/top_rated")
-    Call<MovieResults> topRatedMovieList(@Query("page") int page);
+    Call<MovieResults> topRatedMovieList();
 
     @GET("/3/movie/{movie_id}")
     Call<Movie> movieDetails(@Path("movie_id") int id);

@@ -8,7 +8,6 @@ import android.chribru.dev.popularmovies.persistance.repositories.MovieRepositor
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 
 public class MovieDetailViewModel extends AndroidViewModel {
 
@@ -45,7 +44,7 @@ public class MovieDetailViewModel extends AndroidViewModel {
     }
 
     public void addToFavorites(Movie movie) {
-        movie.setFavorited(true);
+        movie.setUserFavorite(true);
         repository.insertToFavorites(movie);
     }
 
