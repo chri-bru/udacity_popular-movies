@@ -18,6 +18,10 @@ public class Constants {
      * Constant for putting a movie extra
      */
     public static final String MOVIE_ID_PARCELABLE = "MOVIE_ID";
+    /*
+     * Constant for putting a movie extra
+     */
+    public static final String MOVIE_FAV_PARCELABLE = "MOVIE_IS_FAV";
 
     /*
      * Constant for putting a results extra

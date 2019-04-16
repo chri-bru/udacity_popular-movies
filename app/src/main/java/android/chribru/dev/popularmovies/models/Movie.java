@@ -7,6 +7,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
+import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.Ignore;
 import androidx.room.PrimaryKey;
@@ -21,6 +22,7 @@ public class Movie
     private List<Genre> genres = null;
 
     @Expose
+    @ColumnInfo(name = "user_favorite")
     private Boolean isUserFavorite;
 
     @Expose
@@ -83,7 +85,7 @@ public class Movie
      * @param adult flag to indicate adult rating
      * @param overview plot synopsis
      */
-    public Movie(Boolean adult, String backdropPath, List<Genre> genres, Integer id, String overview, String posterPath, String releaseDate, Integer runtime, String title, Double voteAverage, Integer voteCount) {
+    public Movie(Boolean adult, String backdropPath, List<Genre> genres, Integer id, String overview, String posterPath, String releaseDate, Integer runtime, String title, Double voteAverage, Integer voteCount, Boolean isUserFavorite) {
         super();
         this.adult = adult;
         this.backdropPath = backdropPath;
@@ -96,6 +98,7 @@ public class Movie
         this.title = title;
         this.voteAverage = voteAverage;
         this.voteCount = voteCount;
+        this.isUserFavorite = isUserFavorite;
     }
 
     public Boolean getAdult() {

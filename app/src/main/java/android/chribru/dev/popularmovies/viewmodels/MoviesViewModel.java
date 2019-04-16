@@ -30,7 +30,6 @@ public class MoviesViewModel extends AndroidViewModel {
     }
 
     public LiveData<MovieResults> getFavorites() {
-        LiveData<List<Movie>> movies = repository.getFavorites();
-        return Transformations.map(movies, input -> new MovieResults(-1, input, input.size(), -1));
+        return repository.getFavorites();
     }
 }

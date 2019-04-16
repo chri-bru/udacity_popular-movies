@@ -6,6 +6,8 @@ import com.google.gson.annotations.SerializedName;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.annotation.NonNull;
+
 public class MovieResults {
 
     @SerializedName("page")
@@ -25,10 +27,20 @@ public class MovieResults {
     private Integer totalPages;
 
     /**
-     * No args constructor for use in serialization
-     *
+     * Default constructor
      */
     public MovieResults() {
+
+    }
+
+    /**
+     * Constructor for setting just the movie list (e.g. favorites)
+     * @param movies list of all movies
+     */
+    public MovieResults(@NonNull List<Movie> movies) {
+        this.movies = movies;
+        this.totalResults = movies.size();
+        this.totalPages = 1;
     }
 
     /**

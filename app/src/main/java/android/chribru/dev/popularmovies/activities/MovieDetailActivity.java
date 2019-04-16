@@ -11,7 +11,6 @@ import android.chribru.dev.popularmovies.models.Video;
 import android.chribru.dev.popularmovies.viewmodels.MovieDetailViewModel;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -33,7 +32,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     private ActivityMovieDetailBinding binding;
     private ReviewAdapter reviewAdapter;
     private VideoAdapter videoAdapter;
-    private Menu currentMenu;
+    private boolean isFavorite;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +43,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
         setUpToolbar();
         handleIntent();
         setUpAdapters();
+        setUpFab();
 
         this.setTitle(null);
     }
@@ -53,6 +53,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
 
         if (intent.hasExtra(Constants.MOVIE_ID_PARCELABLE)) {
             int movieId = intent.getIntExtra(Constants.MOVIE_ID_PARCELABLE, 0);
+            isFavorite = intent.getBooleanExtra(Constants.MOVIE_FAV_PARCELABLE, false);
             getMovieDetails(movieId);
             getVideos(movieId);
             getReviews(movieId);
@@ -74,10 +75,25 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
 
     private void setUpToolbar() {
         // set toolbar
-        binding.detailToolbar.inflateMenu(R.menu.details_menu);
         binding.detailToolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
         this.setSupportActionBar(binding.detailToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+    }
+
+    private void setUpFab() {
+        binding.favoriteFab.setOnClickListener(v -> {
+            if (movie == null) {
+                return;
+            }
+
+            if (movie.getUserFavorite()) {
+                removeFromFavorites();
+            } else {
+                addToFavorites();
+            }
+
+            toggleFabIcon();
+        });
     }
 
     @Override
@@ -93,37 +109,12 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
         getMovieDetails(id);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.details_menu, menu);
-        currentMenu = menu;
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int selectedItem = item.getItemId();
-
-        if (selectedItem == R.id.favorites) {
-            if (item.isCheckable() && !item.isChecked()) {
-                setFavoriteIconToChecked(item);
-                addToFavorites();
-
-            } else {
-                setFavoriteIconToUnchecked(item);
-                removeFromFavorites();
-            }
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-
     private void getMovieDetails(int id) {
         viewModel.getMovieDetails(id).observe(this, movie1 -> {
                 movie = movie1;
-                populateUi();
+                movie.setUserFavorite(isFavorite);
                 binding.setMovie(movie);
+                populateUi();
             }
         );
     }
@@ -142,10 +133,12 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     }
 
     private void addToFavorites() {
+        movie.setUserFavorite(true);
         viewModel.addToFavorites(movie);
     }
 
     private void removeFromFavorites() {
+        movie.setUserFavorite(false);
         viewModel.removeFromFavorites(movie);
     }
 
@@ -155,27 +148,14 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
             return;
         }
         setVisibilityOfOverview(true);
-        binding.detailUserRating.setVisibility(View.VISIBLE);
+
+        // set fab image depending on movie favorite status
+        toggleFabIcon();
     }
 
-    private void setMenuItem() {
-        if (currentMenu == null) {
-            return;
-        }
-        MenuItem item = currentMenu.getItem(0);
-        if (movie.getUserFavorite()) {
-            setFavoriteIconToChecked(item);
-        }
-    }
-
-    private void setFavoriteIconToChecked(MenuItem item) {
-        item.setIcon(R.drawable.ic_favorite_black_24dp);
-        item.setChecked(true);
-    }
-
-    private void setFavoriteIconToUnchecked(MenuItem item) {
-        item.setIcon(R.drawable.ic_favorite_border_black_24dp);
-        item.setChecked(false);
+    private void toggleFabIcon() {
+        int image = movie.getUserFavorite() ? R.drawable.ic_favorite_black_24dp : R.drawable.ic_favorite_border_black_24dp;
+        binding.favoriteFab.setImageDrawable(getResources().getDrawable(image, this.getTheme()));
     }
 
     private void displayErrorMessage() {
@@ -202,6 +182,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
         binding.detailDescription.setVisibility(visibility);
         binding.detailBackdropImg.setVisibility(visibility);
         binding.detailPosterImg.setVisibility(visibility);
+        binding.detailUserRating.setVisibility(visibility);
     }
 
     // on click for videos

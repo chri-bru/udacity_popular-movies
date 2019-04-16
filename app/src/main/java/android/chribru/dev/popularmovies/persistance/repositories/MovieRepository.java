@@ -34,23 +34,8 @@ public class MovieRepository {
 
     public LiveData<Movie> getMovieDetails(int id) {
         final MutableLiveData<Movie> data = new MutableLiveData<>();
-
-        LiveData<Movie> movie = movieDao.getMovie(id);
-        movie.observeForever(movie1 -> {
-            if (movie1 == null) {
-                client.getMovieDetails(id).enqueue(new MovieCallbackHandler(data));
-            } else {
-                data.setValue(movie1);
-            }
-        });
-
-        // favorited movies are already persisted
-        return Transformations.map(data, input -> {
-                    if (input != null && !input.getUserFavorite()) {
-                        insertMovie(input);
-                    }
-                    return input;
-                });
+        client.getMovieDetails(id).enqueue(new MovieCallbackHandler(data));
+        return data;
     }
 
     public LiveData<MovieResults> getPopularMovies() {
@@ -78,17 +63,13 @@ public class MovieRepository {
     }
 
     // Favorites
-    public LiveData<List<Movie>> getFavorites() {
-        return movieDao.getAllMovies();
+    public LiveData<MovieResults> getFavorites() {
+        LiveData<List<Movie>> movies =  movieDao.getAllMovies();
+        return Transformations.map(movies, MovieResults::new);
     }
 
     public void insertToFavorites(Movie movie) {
         movie.setUserFavorite(true);
-        new InsertAsyncTask(movieDao).execute(movie);
-    }
-
-    private void insertMovie(Movie movie) {
-        movie.setUserFavorite(false);
         new InsertAsyncTask(movieDao).execute(movie);
     }
 
