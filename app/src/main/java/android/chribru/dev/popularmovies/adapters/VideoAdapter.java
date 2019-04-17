@@ -4,7 +4,6 @@ import android.chribru.dev.popularmovies.R;
 import android.chribru.dev.popularmovies.interfaces.VideoOnClickHandler;
 import android.chribru.dev.popularmovies.models.Video;
 import android.chribru.dev.popularmovies.models.VideoResults;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +11,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,14 +58,12 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoCellVie
     }
 
     private VideoResults results;
-    private Map<VideoType, List<Video>> countPerType = new HashMap<>();
+    private final Map<VideoType, List<Video>> countPerType = new HashMap<>();
 
     private final VideoOnClickHandler onClickHandler;
-    private final Context context;
 
-    public VideoAdapter(VideoOnClickHandler handler, Context context) {
+    public VideoAdapter(VideoOnClickHandler handler) {
         this.onClickHandler = handler;
-        this.context = context;
     }
 
     @NonNull
@@ -83,8 +79,14 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoCellVie
         Video video = results.getResults().get(position);
 
         VideoType type = VideoType.getType(video.getType());
-        int count =  countPerType.get(type).indexOf(video);
-        holder.title.setText(video.getType() + " " + count);
+        List<Video> list =  countPerType.get(type);
+
+        if (list != null) {
+            int count = list.indexOf(video);
+            holder.title.setText(video.getType() + " " + count);
+        } else {
+            holder.title.setText(video.getType());
+        }
     }
 
     @Override
@@ -101,8 +103,8 @@ public class VideoAdapter extends RecyclerView.Adapter<VideoAdapter.VideoCellVie
         for (Video vid : results.getResults()) {
             List<Video> videos;
             VideoType type = VideoType.getType(vid.getType());
-            if (countPerType != null && countPerType.containsKey(type)) {
-                videos = countPerType.get(type);
+            if (countPerType.containsKey(type)) {
+                videos = countPerType.getOrDefault(type, new ArrayList<>());
             } else {
                 videos = new ArrayList<>();
             }

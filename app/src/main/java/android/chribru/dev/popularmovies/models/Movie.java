@@ -32,7 +32,7 @@ public class Movie
     @Expose
     private String backdropPath;
 
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey()
     private Integer id;
 
     @SerializedName("overview")

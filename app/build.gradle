@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "android.chribru.dev.popularmovies"
-        minSdkVersion 23
+        minSdkVersion 24
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -55,7 +55,7 @@ dependencies {
     annotationProcessor "androidx.room:room-compiler:$room_version"
 }
 
-def getApiKey(String property){
+static def getApiKey(String property){
     Properties properties = new Properties()
     properties.load(new FileInputStream("./api_key"))
     return "\"" + properties.getProperty(property) +"\""

@@ -1,6 +1,5 @@
 package android.chribru.dev.popularmovies.persistance.repositories.handlers;
 
-import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.models.MovieResults;
 import android.util.Log;
 
@@ -16,7 +15,7 @@ import retrofit2.Response;
  */
 public class MovieResultsCallbackHandler implements Callback<MovieResults> {
 
-    private final MutableLiveData data;
+    private final MutableLiveData<MovieResults> data;
 
     public MovieResultsCallbackHandler(MutableLiveData<MovieResults> data) {
         this.data = data;

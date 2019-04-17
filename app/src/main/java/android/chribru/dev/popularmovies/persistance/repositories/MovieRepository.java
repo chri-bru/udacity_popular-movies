@@ -27,8 +27,8 @@ public class MovieRepository {
     private static MovieRepository repository = null;
 
     // data sources
-    private MovieClient client;
-    private MovieDao movieDao;
+    private final MovieClient client;
+    private final MovieDao movieDao;
 
     // caching
     private final HashMap<Integer, MutableLiveData<Movie>> movieCache;
@@ -152,14 +152,18 @@ public class MovieRepository {
      * and inserted into the cache.
      */
     public LiveData<MovieResults> getFavorites() {
-        if (favoritesCache == null ||
-                favoritesCache.getValue() == null ||
-                favoritesCache.getValue().getMovies() == null ||
-                favoritesCache.getValue().getMovies().size() == 0) {
+        if (isFavoriteCacheEmpty()) {
             LiveData<List<Movie>> movies =  movieDao.getAllMovies();
             favoritesCache = Transformations.map(movies, MovieResults::new);
         }
         return favoritesCache;
+    }
+
+    private boolean isFavoriteCacheEmpty() {
+        return (favoritesCache == null ||
+                favoritesCache.getValue() == null ||
+                favoritesCache.getValue().getMovies() == null ||
+                favoritesCache.getValue().getMovies().size() == 0);
     }
 
     /**
@@ -168,13 +172,14 @@ public class MovieRepository {
      */
     public void insertToFavorites(Movie movie) {
         movie.setUserFavorite(true);
-        if (favoritesCache != null) {
+        if (!isFavoriteCacheEmpty()) {
             favoritesCache.getValue().getMovies().add(movie);
         }
         new InsertAsyncTask(movieDao).execute(movie);
     }
-    private class InsertAsyncTask extends AsyncTask<Movie, Void, Void> {
-        private MovieDao movieDao;
+
+    private static class InsertAsyncTask extends AsyncTask<Movie, Void, Void> {
+        private final MovieDao movieDao;
 
         InsertAsyncTask(MovieDao dao) {
             movieDao = dao;
@@ -192,14 +197,14 @@ public class MovieRepository {
      * @param movie the movie to remove
      */
     public void deleteFromFavorites(Movie movie) {
-        if (favoritesCache != null) {
+        if (!isFavoriteCacheEmpty()) {
             favoritesCache.getValue().getMovies().remove(movie);
         }
         new DeleteAsysncTask(movieDao).execute(movie);
     }
 
-    private class DeleteAsysncTask extends AsyncTask<Movie, Void, Void> {
-        private MovieDao movieDao;
+    private static class DeleteAsysncTask extends AsyncTask<Movie, Void, Void> {
+        private final MovieDao movieDao;
 
         DeleteAsysncTask(MovieDao dao) {
             movieDao = dao;

@@ -15,7 +15,7 @@ import retrofit2.Response;
  */
 public class MovieCallbackHandler implements Callback<Movie> {
 
-    private final MutableLiveData data;
+    private final MutableLiveData<Movie> data;
 
     public MovieCallbackHandler(MutableLiveData<Movie> data) {
         this.data = data;

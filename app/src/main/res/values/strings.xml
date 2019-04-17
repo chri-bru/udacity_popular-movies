@@ -16,12 +16,13 @@
     <string name="overview_thumbnail_description">The movie poster is used as a thumbnail.</string>
     <string name="detail_backdrop_description">The movie backdrop is used here.</string>
     <string name="detail_thumbnail_description">The movie poster is used as a thumbnail.</string>
+    <string name="fav_button">Button used to favorite or unfavorite a movie.</string>
 
     <!-- Movie details -->
-    <string name="movie_runtime">%1$s min</string>
-    <string name="favorites">Favorites</string>
     <string name="videos">Available videos</string>
     <string name="reviews">Reviews</string>
     <string name="videos_error">No videos are available</string>
     <string name="reviews_error">No reviews have been posted yet. Be the first one!</string>
+    <string name="movie_runtime">%1$s min</string>
+    <string name="favorites">Favorites</string>
 </resources>

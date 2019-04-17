@@ -13,12 +13,10 @@ import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.view.View;
 
-import com.google.android.material.snackbar.Snackbar;
-
 import java.util.Locale;
+import java.util.Objects;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
@@ -65,19 +63,19 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     private void setUpAdapters() {
         // review
         binding.rvReviews.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
-        reviewAdapter = new ReviewAdapter(this);
+        reviewAdapter = new ReviewAdapter();
         binding.rvReviews.setAdapter(reviewAdapter);
 
         // videos
         binding.rvTrailers.setLayoutManager(new LinearLayoutManager(this, RecyclerView.HORIZONTAL, false));
-        videoAdapter = new VideoAdapter(this, this);
+        videoAdapter = new VideoAdapter(this);
         binding.rvTrailers.setAdapter(videoAdapter);
     }
 
     private void setUpToolbar() {
         binding.detailToolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
         this.setSupportActionBar(binding.detailToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
     private void setUpFab() {

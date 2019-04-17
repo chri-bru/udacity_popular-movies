@@ -3,7 +3,6 @@ package android.chribru.dev.popularmovies.adapters;
 import android.chribru.dev.popularmovies.R;
 import android.chribru.dev.popularmovies.models.Review;
 import android.chribru.dev.popularmovies.models.ReviewResults;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,9 @@ import androidx.recyclerview.widget.RecyclerView;
 public class ReviewAdapter extends RecyclerView.Adapter<ReviewAdapter.ReviewCellViewHolder> {
 
     private ReviewResults results;
-    private final Context context;
 
-    public ReviewAdapter(Context context) {
-        this.context = context;
+    public ReviewAdapter() {
+
     }
 
     @NonNull
