@@ -9,7 +9,9 @@ import android.chribru.dev.popularmovies.interfaces.VideoOnClickHandler;
 import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.models.Video;
 import android.chribru.dev.popularmovies.viewmodels.MovieDetailViewModel;
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -61,7 +63,6 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     }
 
     private void setUpAdapters() {
-        // set adapters
         // review
         binding.rvReviews.setLayoutManager(new LinearLayoutManager(this, RecyclerView.VERTICAL, false));
         reviewAdapter = new ReviewAdapter(this);
@@ -74,7 +75,6 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     }
 
     private void setUpToolbar() {
-        // set toolbar
         binding.detailToolbar.setOnMenuItemClickListener(this::onOptionsItemSelected);
         this.setSupportActionBar(binding.detailToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -122,12 +122,18 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     private void getVideos(int id) {
         String locale = Locale.getDefault().getLanguage();
         viewModel.getVideos(id, locale).observe(this, videoResults -> {
+            int visibility = videoResults.getResults() == null || videoResults.getResults().size() == 0 ?
+                    View.VISIBLE : View.INVISIBLE;
+            binding.videosErrorMessage.setVisibility(visibility);
             videoAdapter.setResults(videoResults);
         });
     }
 
     private void getReviews(int id) {
         viewModel.getReviews(id, 1).observe(this, reviewResults -> {
+            int visibility = reviewResults.getResults() == null || reviewResults.getResults().size() == 0 ?
+                    View.VISIBLE : View.INVISIBLE;
+            binding.reviewsErrorMsg.setVisibility(visibility);
             reviewAdapter.setResults(reviewResults);
         });
     }
@@ -143,7 +149,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     }
 
     private void populateUi() {
-        if (movie == null) {
+        if (movie == null || movie.getId() == null) {
             displayErrorMessage();
             return;
         }
@@ -160,6 +166,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
 
     private void displayErrorMessage() {
         setVisibilityOfOverview(false);
+        binding.detailErrorMsg.setVisibility(View.VISIBLE);
     }
 
     private void setVisibilityOfOverview(boolean visible) {
@@ -173,7 +180,6 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     }
 
     private void toggleUiComponentVisibility(int visibility) {
-        binding.detailErrorMsg.setVisibility(visibility);
         binding.detailTitle.setVisibility(visibility);
         binding.detailReleaseDate.setVisibility(visibility);
         binding.detailLength.setVisibility(visibility);
@@ -182,12 +188,35 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
         binding.detailDescription.setVisibility(visibility);
         binding.detailBackdropImg.setVisibility(visibility);
         binding.detailPosterImg.setVisibility(visibility);
-        binding.detailUserRating.setVisibility(visibility);
+
+        if (visibility == View.VISIBLE) {
+            binding.favoriteFab.show();
+            binding.detailErrorMsg.setVisibility(View.INVISIBLE);
+        } else {
+            binding.favoriteFab.hide();
+        }
     }
 
-    // on click for videos
+    /**
+     * Opens the video link
+     * @param video the video that was clicked
+     */
     @Override
     public void onClick(Video video) {
-        Snackbar.make(binding.movieScrollview, video.getName(), Snackbar.LENGTH_LONG);
+        if (video == null || video.getKey().equals("") || video.getKey() == null) {
+            return;
+        }
+
+        Uri appUri = Uri.parse("vnd.youtube:" + video.getKey());
+        Uri webUri = Uri.parse("http://www.youtube.com/watch?v=" + video.getKey());
+
+        try {
+            Intent appIntent = new Intent(Intent.ACTION_VIEW, appUri);
+            startActivity(appIntent);
+        } catch (ActivityNotFoundException ex) {
+            // the youtube app isn't available, fallback to web browser
+            Intent webIntent = new Intent(Intent.ACTION_VIEW, webUri);
+            startActivity(webIntent);
+        }
     }
 }

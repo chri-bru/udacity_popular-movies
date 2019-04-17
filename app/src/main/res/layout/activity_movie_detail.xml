@@ -164,26 +164,51 @@
             <!-- Divider + Videos -->
             <View
                 android:id="@+id/divider"
-                android:layout_width="0dp"
+                android:layout_width="379dp"
                 android:layout_height="1dp"
                 android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="16dp"
                 android:background="?android:attr/listDivider"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/detail_description" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_trailers"
+            <TextView
+                android:id="@+id/videos_container_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
+                android:text="@string/videos"
+                app:layout_constraintEnd_toEndOf="@+id/divider"
+                app:layout_constraintStart_toStartOf="@+id/divider"
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_trailers"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="videos_container_title"
+                app:layout_constraintStart_toStartOf="videos_container_title"
+                app:layout_constraintTop_toBottomOf="@+id/videos_container_title" />
+
+            <TextView
+                android:id="@+id/videos_error_message"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/videos_error"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/divider" />
+                app:layout_constraintTop_toBottomOf="@+id/videos_container_title" />
 
             <!-- Divider + Reviews -->
             <View
@@ -198,17 +223,43 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/rv_trailers" />
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rv_reviews"
+            <TextView
+                android:id="@+id/reviews_container_title"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:layout_marginEnd="16dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
+                android:text="@string/reviews"
+                app:layout_constraintEnd_toEndOf="@+id/divider2"
+                app:layout_constraintStart_toStartOf="@+id/divider2"
                 app:layout_constraintTop_toBottomOf="@+id/divider2" />
 
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_reviews"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/reviews_container_title"
+                app:layout_constraintStart_toStartOf="@+id/reviews_container_title"
+                app:layout_constraintTop_toBottomOf="@+id/reviews_container_title" />
+
+            <TextView
+                android:id="@+id/reviews_error_msg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/reviews_error"
+                android:visibility="gone"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="16dp"
+                app:layout_constraintEnd_toEndOf="@+id/reviews_container_title"
+                app:layout_constraintStart_toStartOf="@+id/reviews_container_title"
+                app:layout_constraintTop_toBottomOf="@+id/reviews_container_title" />
+
+            <!-- FAB for favorites -->
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/favorite_fab"
                 android:layout_width="wrap_content"
