@@ -18,7 +18,7 @@ public class MoviesViewModel extends AndroidViewModel {
 
     public MoviesViewModel(Application application) {
         super(application);
-        this.repository = new MovieRepository(application);
+        this.repository = MovieRepository.getInstance(application);
     }
 
     public LiveData<MovieResults> getPopularMovies() {

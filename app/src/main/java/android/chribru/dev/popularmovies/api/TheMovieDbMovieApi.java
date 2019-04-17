@@ -25,5 +25,5 @@ public interface TheMovieDbMovieApi {
     Call<VideoResults> videos(@Path("movie_id") int id, @Query("language") String language);
 
     @GET("/3/movie/{movie_id}/reviews")
-    Call<ReviewResults> reviews(@Path("movie_id") int id, @Query("page") int page);
+    Call<ReviewResults> reviews(@Path("movie_id") int id);
 }

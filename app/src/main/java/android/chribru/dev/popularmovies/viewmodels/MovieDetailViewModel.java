@@ -19,7 +19,7 @@ public class MovieDetailViewModel extends AndroidViewModel {
 
     public MovieDetailViewModel(Application application) {
         super(application);
-        this.repository = new MovieRepository(application);
+        this.repository = MovieRepository.getInstance(application);
     }
 
     public LiveData<Movie> getMovieDetails(int id) {
@@ -36,9 +36,9 @@ public class MovieDetailViewModel extends AndroidViewModel {
         return videos;
     }
 
-    public LiveData<ReviewResults> getReviews(int movieId, int page) {
+    public LiveData<ReviewResults> getReviews(int movieId) {
         if (reviews == null) {
-            reviews = repository.getReviewsForMovie(movieId, page);
+            reviews = repository.getReviewsForMovie(movieId);
         }
         return reviews;
     }

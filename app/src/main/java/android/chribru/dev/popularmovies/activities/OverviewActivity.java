@@ -6,6 +6,7 @@ import android.chribru.dev.popularmovies.databinding.ActivityOverviewBinding;
 import android.chribru.dev.popularmovies.interfaces.OverviewAdapterOnClickHandler;
 import android.chribru.dev.popularmovies.models.Movie;
 import android.chribru.dev.popularmovies.models.MovieResults;
+import android.chribru.dev.popularmovies.models.Sorting;
 import android.chribru.dev.popularmovies.viewmodels.MoviesViewModel;
 import android.content.Intent;
 import android.os.Bundle;
@@ -27,12 +28,6 @@ public class OverviewActivity extends AppCompatActivity implements OverviewAdapt
     private OverviewAdapter adapter;
     private ActivityOverviewBinding binding;
     private Sorting sortOrder;
-
-    public enum Sorting {
-        MostPopular,
-        TopRated,
-        Favorites
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

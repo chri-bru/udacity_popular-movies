@@ -52,9 +52,8 @@ public class MovieClient {
     /**
      * Returns reviews for a given movie.
      * @param id the id of the movie
-     * @param page the page of the results
      */
-    public Call<ReviewResults> getReviewsForMovie(int id, int page) {
-        return movieApi.reviews(id, page);
+    public Call<ReviewResults> getReviewsForMovie(int id) {
+        return movieApi.reviews(id);
     }
 }

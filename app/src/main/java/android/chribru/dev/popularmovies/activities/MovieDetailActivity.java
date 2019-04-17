@@ -130,7 +130,7 @@ public class MovieDetailActivity extends AppCompatActivity implements VideoOnCli
     }
 
     private void getReviews(int id) {
-        viewModel.getReviews(id, 1).observe(this, reviewResults -> {
+        viewModel.getReviews(id).observe(this, reviewResults -> {
             int visibility = reviewResults.getResults() == null || reviewResults.getResults().size() == 0 ?
                     View.VISIBLE : View.INVISIBLE;
             binding.reviewsErrorMsg.setVisibility(visibility);
